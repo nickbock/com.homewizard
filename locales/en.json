@@ -1,0 +1,10 @@
+{
+    "settings": {
+        "title": "HomeWizard settings",
+        "intro": "To connect to your HomeWizard we need the settings below.",
+        "password": "Password",
+        "use_ledring": "Use ledring",
+        "use_ledring_explain": "Ledring lights up green when preset switched successful, red when not successful",
+        "save": "Save"
+    }
+}

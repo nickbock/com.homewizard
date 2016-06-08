@@ -1,0 +1,115 @@
+{
+    "id": "com.homewizard",
+    "name": {
+        "en": "HomeWizard"
+    },
+    "version": "0.0.1",
+    "compatibility": "0.x || 1.x",
+    "description": {
+		"en": "Control HomeWizard using Homey"
+	},
+    "category": "appliances",
+    "images": {
+		"large": "assets/images/large.jpg",
+		"small": "assets/images/small.jpg"
+	},
+    "author": {
+        "name": "Jeroen Bos",
+        "email": "jeroenbos22@gmail.com"
+    },
+    "flow": {
+        "conditions": [
+            {
+                "id": "check_preset",
+                "title": {
+                    "en": "Preset !{{is|isn't}}",
+                    "nl": "Preset !{{is|is niet}}"
+                },
+                "args": [
+                    {
+                        "name": "preset",
+                        "type": "dropdown",
+                        "values": [
+                            {
+                                "id": "0",
+                                "label": {
+                                    "en": "Home",
+                                    "nl": "Thuis"
+                                }
+                            },
+                            {
+                                "id": "1",
+                                "label": {
+                                    "en": "Away",
+                                    "nl": "Afwezig"
+                                }
+                            },
+                            {
+                                "id": "2",
+                                "label": {
+                                    "en": "Sleep",
+                                    "nl": "Slapen"
+                                }
+                            },
+                            {
+                                "id": "3",
+                                "label": {
+                                    "en": "Holiday",
+                                    "nl": "Vakantie"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "actions": [
+            {
+                "id": "set_preset",
+                "title": {
+                    "en": "Activate preset",
+                    "nl": "Activeer preset"
+                },
+                "args": [
+                    {
+                        "name": "preset",
+                        "type": "dropdown",
+                        "values": [
+                            {
+                                "id": "0",
+                                "label": {
+                                    "en": "Home",
+                                    "nl": "Thuis"
+                                }
+                            },
+                            {
+                                "id": "1",
+                                "label": {
+                                    "en": "Away",
+                                    "nl": "Afwezig"
+                                }
+                            },
+                            {
+                                "id": "2",
+                                "label": {
+                                    "en": "Sleep",
+                                    "nl": "Slapen"
+                                }
+                            },
+                            {
+                                "id": "3",
+                                "label": {
+                                    "en": "Holiday",
+                                    "nl": "Vakantie"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "permissions": [
+        "homey:manager:ledring"
+    ]
+}

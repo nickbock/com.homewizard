@@ -1,0 +1,10 @@
+{
+    "settings": {
+        "title": "HomeWizard instellingen",
+        "intro": "Om verbinding te kunnen maken met uw HomeWizard zijn onderstaande gegevens benodigd.",
+        "password": "Wachtwoord",
+        "use_ledring": "Gebruik ledring",
+        "use_ledring_explain": "Ledring licht groen op indien de preset aangepast is, rood indien niet succesvol",
+        "save": "Opslaan"
+    }
+}
