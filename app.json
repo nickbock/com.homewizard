@@ -17,6 +17,14 @@
         "name": "Jeroen Bos",
         "email": "jeroenbos22@gmail.com"
     },
+    "contributors": {
+        "developers": [
+          {
+            "name": "Jeroen Bos",
+            "email": "jeroenbos22@gmail.com"
+          }
+        ]
+    },
     "flow": {
         "conditions": [
             {
