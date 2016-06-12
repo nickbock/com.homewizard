@@ -3,7 +3,7 @@
     "name": {
         "en": "HomeWizard"
     },
-    "version": "0.0.2",
+    "version": "0.0.3",
     "compatibility": "0.x || 1.x",
     "description": {
 		"en": "Control HomeWizard using Homey"
