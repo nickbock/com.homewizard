@@ -175,7 +175,7 @@
                 "small": "drivers/homewizard/assets/images/small.jpg"
             },
             "class": "appliances",
-            "capabilities": [ "other" ],
+            "capabilities": [],
             "pair": [
                 {
                     "id": "start"
