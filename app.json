@@ -3,7 +3,7 @@
     "name": {
         "en": "HomeWizard"
     },
-    "version": "0.0.3",
+    "version": "0.0.4",
     "compatibility": "0.x || 1.x",
     "description": {
 		"en": "Control HomeWizard using Homey"
@@ -123,6 +123,42 @@
 						"type": "device",
 						"filter": "driver_id=homewizard"
 					}
+                ]
+            },
+            {
+                "id": "switch_scene_on",
+                "title": {
+                    "en": "Switch scene on",
+                    "nl": "Zet scene aan"
+                },
+                "args": [
+                    {
+                        "name": "scene",
+                        "type": "autocomplete"
+                    },
+                    {
+                        "name": "device",
+                        "type": "device",
+                        "filter": "driver_id=homewizard"
+                    }
+                ]
+            },
+            {
+                "id": "switch_scene_off",
+                "title": {
+                    "en": "Switch scene off",
+                    "nl": "Zet scene uit"
+                },
+                "args": [
+                    {
+                        "name": "scene",
+                        "type": "autocomplete"
+                    },
+                    {
+                        "name": "device",
+                        "type": "device",
+                        "filter": "driver_id=homewizard"
+                    }
                 ]
             }
         ]

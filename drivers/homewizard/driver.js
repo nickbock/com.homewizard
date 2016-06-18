@@ -1,13 +1,14 @@
 var devices = [];
+var scenes = [];
 var request = require('request');
 
+// SETTINGS
 module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj, changedKeysArr, callback ) {
     Homey.log ('Changed settings: ' + JSON.stringify(device_data) + ' / ' + JSON.stringify(newSettingsObj) + ' / old = ' + JSON.stringify(oldSettingsObj));
     try {
 	    changedKeysArr.forEach(function (key) {
 		    devices[device_data.id].settings[key] = newSettingsObj[key];
 		});
-        Homey.log('Settings changed!' + JSON.stringify(device));
 		callback(null, true);
     } catch (error) {
       callback(error); 
@@ -16,7 +17,6 @@ module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj,
 
 module.exports.pair = function( socket ) {
     socket.on('manual_add', function (device, callback) {
-    	
         var url = 'http://' + device.settings.homewizard_ip + '/' + device.settings.homewizard_pass + '/get-status/';
         //Homey.log('Calling '+ url);
         request(url, function (error, response, body) {
@@ -70,81 +70,139 @@ module.exports.deleted = function( device_data ) {
     devices[device_data.id] = [];
 };
 
+// SCENES
+Homey.manager('flow').on('action.switch_scene_on.scene.autocomplete', function( callback, args ){
+    getScenes( args, function(err, response) {
+      callback(err, response ); // err, results
+    });
+});
+
+Homey.manager('flow').on('action.switch_scene_on', function( callback, args ){
+    var uri = '/gp/' + args.scene.id + '/on';
+    callHomeWizard( args, uri, function(err, response) {
+      if (err === null) {
+        Homey.log('Scene is on');
+        callback( null, true );
+      } else {
+        callback(err, false); // err
+      }
+    });
+});  
+
+Homey.manager('flow').on('action.switch_scene_off.scene.autocomplete', function( callback, args ){
+    getScenes( args, function(err, response) {
+      callback(err, response ); // err, results
+    });
+});
+
+Homey.manager('flow').on('action.switch_scene_off', function( callback, args ){
+    var uri = '/gp/' + args.scene.id + '/off';
+    callHomeWizard( args, uri, function(err, response) {
+      if (err === null) {
+        Homey.log('Scene is off');
+        callback( null, true );
+      } else {
+        callback(err, false); // err
+      }
+    });
+});  
+
+
+// PRESETS
 Homey.manager('flow').on('condition.check_preset', function( callback, args ){
-    var homewizard_ip = devices[args.device.id].settings.homewizard_ip;
-    var homewizard_pass = devices[args.device.id].settings.homewizard_pass;
-    request({
-      uri: 'http://' + homewizard_ip + '/' + homewizard_pass + '/get-status/',
-      method: "GET",
-      timeout: 10000,
-    }, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        var jsonObject = JSON.parse(body);
-        if (jsonObject.response.preset == args.preset) {
-            Homey.log('Yes, preset is: '+jsonObject.response.preset+'!');
-            callback(null, true);
+    callHomeWizard( args, '/get-status/', function(err, response) {
+      if (err === null) {
+        if (response.preset == args.preset) {
+            Homey.log('Yes, preset is: '+ response.preset+'!');
+            if(typeof callback === 'function') {
+                callback(null, true);
+            }
         } else {
-            Homey.log('Preset is: '+jsonObject.response.preset+', not '+args.preset);
-            callback(null, false);
+            Homey.log('Preset is: ' + response.preset+', not '+args.preset);
+            if(typeof callback === 'function') {
+                callback(null, false);
+            }
         }
       } else {
-        Homey.log('Error: '+error);
-        callback(null, false);
+        callback(err, false); // err
       }
     });
 });
 	
 	
 Homey.manager('flow').on('action.set_preset', function( callback, args ){
-    var homewizard_ip = devices[args.device.id].settings.homewizard_ip;
-    var homewizard_pass = devices[args.device.id].settings.homewizard_pass;
-    var homewizard_ledring = devices[args.device.id].settings.homewizard_ledring;
-    if (isNaN(homewizard_ledring)) {
-      homewizard_ledring = 0;
-    }
-    request({
-      uri: 'http://' + homewizard_ip + '/' + homewizard_pass + '/preset/' + args.preset,
-      method: "GET",
-      timeout: 10000,
-    }, function (error, response, body) {
-      if (!error && response.statusCode == 200) {	
-        var jsonObject = JSON.parse(body);
-        if (jsonObject.status == 'ok') {
-            if (homewizard_ledring) {
-                ledring_pulse('green');
-            }
-            callback(null, true);
-        } else {
-            if (homewizard_ledring) {
-                ledring_pulse('red');
-            }
-            callback(null, false);
-        }
+    var uri = '/preset/' + args.preset;
+    callHomeWizard( args, uri, function(err, response) {
+      if (err === null) {
+        ledring_pulse(args, 'green');
+        callback(null, true);
       } else {
-        Homey.log('Error: '+error);
-        if (homewizard_ledring) {
-            ledring_pulse('red');
-        }
-        callback(null, false);
+        ledring_pulse(args, 'red');
+        callback(err, false); // err
       }
     });
 });
 
-function ledring_pulse(colorName) {
-	Homey.manager('ledring').animate(
-		'pulse', // animation name (choose from loading, pulse, progress, solid) 
-		{
-			color: colorName,
-		},
-		'INFORMATIVE', // priority
-		3000, // duration
-		function(err, success) { // callback
-			if(err) return Homey.error(err);
-			Homey.log("Ledring pulsing "+colorName);
-		}
-	);
+function ledring_pulse(args, colorName) {
+    var homewizard_ledring = devices[args.device.id].settings.homewizard_ledring;
+    if (homewizard_ledring) {
+      Homey.manager('ledring').animate(
+          'pulse', // animation name (choose from loading, pulse, progress, solid) 
+          {
+              color: colorName,
+          },
+          'INFORMATIVE', // priority
+          3000, // duration
+          function(err, success) { // callback
+              if(err) return Homey.error(err);
+              Homey.log("Ledring pulsing "+colorName);
+          }
+      );
+    }
 }
 
+function getScenes(args, callback) {
+  callHomeWizard( args, '/gplist', function(err, response) {
+    if (err === null) {
+      var output = [];
+      for (var i = 0, len = response.length; i < len; i++) {
+          if (response[i].name.toLowerCase().indexOf(args.query.toLowerCase()) !== -1) {
+              output[output.length] = response[i];
+          }
+      }
+      if(typeof callback === 'function') {
+        callback(null, output); 
+      }  
+    } else {
+      callback(err); // err
+    }
+  });
+}
 
-//module.exports.setUnavailable( device_data, "Offline" );
-//module.exports.setAvailable( device_data );
+function callHomeWizard(args, uri_part, callback) {
+  var homewizard_ip = devices[args.device.id].settings.homewizard_ip;
+  var homewizard_pass = devices[args.device.id].settings.homewizard_pass;
+  request({
+      uri: 'http://' + homewizard_ip + '/' + homewizard_pass + uri_part,
+      method: "GET",
+      timeout: 10000,
+    }, function (error, response, body) {
+      if (response === null || response === undefined) {
+          callback(false); 
+          return;
+      }
+      if (!error && response.statusCode == 200) {	
+        var jsonObject = JSON.parse(body);
+        if (jsonObject.status == 'ok') {
+            if(typeof callback === 'function') {
+              callback(null, jsonObject.response); 
+            }
+        }
+      } else {        
+        if(typeof callback === 'function') {
+          callback(false); 
+        }
+        Homey.log('Error: '+error);
+      }
+  });
+}
