@@ -17,7 +17,6 @@ function saveSettings () {
             'homewizard_ledring': homewizard_ledring
 	    },
 	    name: 'HomeWizard',
-	    capabilities: []
 	}, function( err, result ){
 	    if( err ) return console.error(err);
 	});
@@ -35,7 +34,7 @@ function saveSettings () {
                 'homewizard_ledring': device.settings.homewizard_ledring,
             },
             name: device.name,
-            capabilities: [ "" ]
+            capabilities: []
         }, function( err, result ){
             if( err ) return console.error(err);
             Homey.done();
