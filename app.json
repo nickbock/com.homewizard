@@ -225,7 +225,7 @@
 	                            "en": "Use ledring",
 	                            "nl": "Gebruik ledring"
 	                        },
-	                        "value": 0
+	                        "value": false
 	                    }
 	                ]
 	            }
