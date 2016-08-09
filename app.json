@@ -3,7 +3,7 @@
     "name": {
         "en": "HomeWizard"
     },
-    "version": "0.0.5",
+    "version": "0.0.6",
     "compatibility": ">=0.9",
     "description": {
 		"en": "Control HomeWizard using Homey"
@@ -224,7 +224,8 @@
 	                        "label": {
 	                            "en": "Use ledring",
 	                            "nl": "Gebruik ledring"
-	                        }
+	                        },
+	                        "value": 0
 	                    }
 	                ]
 	            }
