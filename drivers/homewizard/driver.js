@@ -144,7 +144,7 @@ Homey.manager('flow').on('action.set_preset', function( callback, args ){
 });
 
 function ledring_pulse(args, colorName) {
-    var homewizard_ledring = devices[args.device.id].settings.homewizard_ledring;
+    var homewizard_ledring = devices[args.device_id].settings.homewizard_ledring;
     if (homewizard_ledring) {
       Homey.manager('ledring').animate(
           'pulse', // animation name (choose from loading, pulse, progress, solid) 
@@ -180,8 +180,8 @@ function getScenes(args, callback) {
 }
 
 function callHomeWizard(args, uri_part, callback) {
-  var homewizard_ip = devices[args.device.id].settings.homewizard_ip;
-  var homewizard_pass = devices[args.device.id].settings.homewizard_pass;
+  var homewizard_ip = devices[args.device_id].settings.homewizard_ip;
+  var homewizard_pass = devices[args.device_id].settings.homewizard_pass;
   request({
       uri: 'http://' + homewizard_ip + '/' + homewizard_pass + uri_part,
       method: "GET",
