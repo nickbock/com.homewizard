@@ -79,7 +79,7 @@ Homey.manager('flow').on('action.switch_scene_on.scene.autocomplete', function( 
 
 Homey.manager('flow').on('action.switch_scene_on', function( callback, args ){
     var uri = '/gp/' + args.scene.id + '/on';
-    callHomeWizard( args, uri, function(err, response) {
+    callHomeWizard(args.device.id, uri, function(err, response) {
       if (err === null) {
         Homey.log('Scene is on');
         callback( null, true );
@@ -97,7 +97,7 @@ Homey.manager('flow').on('action.switch_scene_off.scene.autocomplete', function(
 
 Homey.manager('flow').on('action.switch_scene_off', function( callback, args ){
     var uri = '/gp/' + args.scene.id + '/off';
-    callHomeWizard( args, uri, function(err, response) {
+    callHomeWizard(args.device.id, uri, function(err, response) {
       if (err === null) {
         Homey.log('Scene is off');
         callback( null, true );
@@ -110,7 +110,7 @@ Homey.manager('flow').on('action.switch_scene_off', function( callback, args ){
 
 // PRESETS
 Homey.manager('flow').on('condition.check_preset', function( callback, args ){
-    callHomeWizard( args, '/get-status/', function(err, response) {
+    callHomeWizard(args.device.id, '/get-status/', function(err, response) {
       if (err === null) {
         if (response.preset == args.preset) {
             Homey.log('Yes, preset is: '+ response.preset+'!');
@@ -132,19 +132,19 @@ Homey.manager('flow').on('condition.check_preset', function( callback, args ){
 	
 Homey.manager('flow').on('action.set_preset', function( callback, args ){
     var uri = '/preset/' + args.preset;
-    callHomeWizard( args, uri, function(err, response) {
+    callHomeWizard(args.device.id, uri, function(err, response) {
       if (err === null) {
-        ledring_pulse(args, 'green');
+        ledring_pulse(args.device.id, 'green');
         callback(null, true);
       } else {
-        ledring_pulse(args, 'red');
+        ledring_pulse(args.device.id, 'red');
         callback(err, false); // err
       }
     });
 });
 
-function ledring_pulse(args, colorName) {
-    var homewizard_ledring = devices[args.device_id].settings.homewizard_ledring;
+function ledring_pulse(device_id, colorName) {
+    var homewizard_ledring = devices[device_id].settings.homewizard_ledring;
     if (homewizard_ledring) {
       Homey.manager('ledring').animate(
           'pulse', // animation name (choose from loading, pulse, progress, solid) 
@@ -162,7 +162,7 @@ function ledring_pulse(args, colorName) {
 }
 
 function getScenes(args, callback) {
-  callHomeWizard( args, '/gplist', function(err, response) {
+  callHomeWizard(args.args.device.id, '/gplist', function(err, response) {
     if (err === null) {
       var output = [];
       for (var i = 0, len = response.length; i < len; i++) {
@@ -179,9 +179,9 @@ function getScenes(args, callback) {
   });
 }
 
-function callHomeWizard(args, uri_part, callback) {
-  var homewizard_ip = devices[args.device_id].settings.homewizard_ip;
-  var homewizard_pass = devices[args.device_id].settings.homewizard_pass;
+function callHomeWizard(device_id, uri_part, callback) {
+  var homewizard_ip = devices[device_id].settings.homewizard_ip;
+  var homewizard_pass = devices[device_id].settings.homewizard_pass;
   request({
       uri: 'http://' + homewizard_ip + '/' + homewizard_pass + uri_part,
       method: "GET",
