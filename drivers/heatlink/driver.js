@@ -28,15 +28,15 @@ module.exports.pair = function( socket ) {
 			var jsonObject = JSON.parse(body);
 			if (jsonObject.status == 'ok') {
 				//true
-                Homey.log('HW added');
-                devices[device.data.id] = {
+                Homey.log('HL added');
+                devices.push({
                   id: device.data.id,
                   name: device.name,
-                  settings: device.settings,
-                  capabilities: device.capabilities
-                }
+                  settings: device.settings
+                })
                 callback( null, devices );
                 socket.emit("success", device);
+                startPolling();
 			} else {
 				//false
                 socket.emit("error", "no response");
@@ -63,16 +63,17 @@ module.exports.init = function(devices_data, callback) {
 		});
       devices.push(device);
 	});
-
-  startPolling()
-	Homey.log('HomeWizard driver init done');
+  if (devices.length > 0) {
+    startPolling()
+  }
+	Homey.log('Heatlink driver init done');
 
 	callback (null, true);
 };
 
 module.exports.deleted = function( device_data ) {  
     Homey.log('deleted: ' + JSON.stringify(device_data));
-    devices[device_data.id] = [];
+    devices[0] = [];
 };
 
 
@@ -94,16 +95,22 @@ module.exports.capabilities = {
     get: function (device, callback) {
       if (device instanceof Error) return callback(device);
       console.log("target_temperature:get");
+      
       // Retrieve updated data
       getStatus(device);
-      var newvalue = devices[0].setTemperature;
+
+      if (devices[0].setTemperature != 0) {
+        var newvalue = devices[0].setTemperature;
+      } else {
+        var newvalue = devices[0].thermTemperature;
+      }
+      
       callback(null, newvalue);
 
     },
 
     set: function (device, temperature, callback) {
       if (device instanceof Error) return callback(device);
-        // /hl/0/settarget/15.5
         // Catch faulty trigger and max/min temp
         if (!temperature) {
           callback(true, temperature);
@@ -141,6 +148,9 @@ function getStatus(device, callback) {
       var rsp = (response.heatlinks[0].rsp.toFixed(1) * 2) / 2;
       var tte = (response.heatlinks[0].tte.toFixed(1) * 2) / 2;
 
+      console.log(device.id);
+      
+      //Check current temperature
       if (devices[0].temperature != rte) {
         console.log("New RTE - "+ rte);
         
@@ -150,6 +160,7 @@ function getStatus(device, callback) {
         console.log("RTE: no change");
       }
       
+      //Check thermostat temperature
       if (devices[0].thermTemperature != rsp) {
         console.log("New RSP - "+ rsp);
         if (devices[0].setTemperature == 0) {
@@ -160,6 +171,7 @@ function getStatus(device, callback) {
         console.log("RSP: no change");
       }
 
+      //Check heatlink set temperature
       if (devices[0].setTemperature != tte) {
         console.log("New TTE - "+ tte);
         
@@ -173,8 +185,6 @@ function getStatus(device, callback) {
         console.log("TTE: no change");
       }
 
-      console.log(device);
-      //callback(null, rte);
     }
     
   }
@@ -184,14 +194,9 @@ function getStatus(device, callback) {
 
 function startPolling() {
   setInterval(function () {
-    //console.log("--Start Polling 1--");
-    //console.log(devices);
+    console.log("--Start Polling--");
     devices.forEach(function (device) {
-      console.log("--Start Polling--");
-      //console.log(device);
       getStatus(device);
-      //console.log("New temp: "+ rte);
-      
     })
   }, 1000 * 10);
 }
