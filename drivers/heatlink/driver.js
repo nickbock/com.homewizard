@@ -95,18 +95,14 @@ module.exports.capabilities = {
     get: function (device, callback) {
       if (device instanceof Error) return callback(device);
       console.log("target_temperature:get");
-      
       // Retrieve updated data
       getStatus(device);
-
       if (devices[0].setTemperature != 0) {
         var newvalue = devices[0].setTemperature;
       } else {
         var newvalue = devices[0].thermTemperature;
       }
-      
       callback(null, newvalue);
-
     },
 
     set: function (device, temperature, callback) {
@@ -130,20 +126,14 @@ module.exports.capabilities = {
             if (callback) callback(err, temperature);
           }
         )
-      
-
     }
   },
-
 };
-
-
 
 function getStatus(device, callback) {
   callHomeWizard2( device, '/get-status', function(err, response) {
     if (err === null) {
       var output = [];
-      
       var rte = (response.heatlinks[0].rte.toFixed(1) * 2) / 2;
       var rsp = (response.heatlinks[0].rsp.toFixed(1) * 2) / 2;
       var tte = (response.heatlinks[0].tte.toFixed(1) * 2) / 2;
@@ -153,7 +143,6 @@ function getStatus(device, callback) {
       //Check current temperature
       if (devices[0].temperature != rte) {
         console.log("New RTE - "+ rte);
-        
         module.exports.realtime( { id: device.id }, "measure_temperature", rte );
         devices[0].temperature = rte;    
       } else {
@@ -174,7 +163,6 @@ function getStatus(device, callback) {
       //Check heatlink set temperature
       if (devices[0].setTemperature != tte) {
         console.log("New TTE - "+ tte);
-        
         if (tte > 0) {
           module.exports.realtime( { id: device.id }, "target_temperature", tte );
         } else {
@@ -184,12 +172,8 @@ function getStatus(device, callback) {
       } else {
         console.log("TTE: no change");
       }
-
     }
-    
-  }
-
-    )
+  })
 }
 
 function startPolling() {
@@ -199,52 +183,6 @@ function startPolling() {
       getStatus(device);
     })
   }, 1000 * 10);
-}
-
-function ledring_pulse(args, colorName) {
-    var homewizard_ledring = devices[args.device.id].settings.homewizard_ledring;
-    if (homewizard_ledring) {
-      Homey.manager('ledring').animate(
-          'pulse', // animation name (choose from loading, pulse, progress, solid) 
-          {
-              color: colorName,
-          },
-          'INFORMATIVE', // priority
-          3000, // duration
-          function(err, success) { // callback
-              if(err) return Homey.error(err);
-              Homey.log("Ledring pulsing "+colorName);
-          }
-      );
-    }
-}
-
-function callHomeWizard(args, uri_part, callback) {
-  var homewizard_ip = devices[args.device.id].settings.homewizard_ip;
-  var homewizard_pass = devices[args.device.id].settings.homewizard_pass;
-  request({
-      uri: 'http://' + homewizard_ip + '/' + homewizard_pass + uri_part,
-      method: "GET",
-      timeout: 10000,
-    }, function (error, response, body) {
-      if (response === null || response === undefined) {
-          callback(false); 
-          return;
-      }
-      if (!error && response.statusCode == 200) {	
-        var jsonObject = JSON.parse(body);
-        if (jsonObject.status == 'ok') {
-            if(typeof callback === 'function') {
-              callback(null, jsonObject.response); 
-            }
-        }
-      } else {        
-        if(typeof callback === 'function') {
-          callback(false); 
-        }
-        Homey.log('Error: '+error);
-      }
-  });
 }
 
 function callHomeWizard2(device, uri_part, callback) {
