@@ -137,8 +137,14 @@ function getStatus(device, callback) {
       var rte = (response.heatlinks[0].rte.toFixed(1) * 2) / 2;
       var rsp = (response.heatlinks[0].rsp.toFixed(1) * 2) / 2;
       var tte = (response.heatlinks[0].tte.toFixed(1) * 2) / 2;
+      
+      if (typeof device.settings === 'undefined') {
+        var logip = 'undefined';
+      } else {
+        var logip = device.settings.homewizard_ip;
+      }
 
-      console.log(device.id);
+      console.log(device.id + ' - ' + logip);
       
       //Check current temperature
       if (devices[0].temperature != rte) {
