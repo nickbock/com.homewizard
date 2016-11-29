@@ -1,6 +1,7 @@
 var devices = [];
 var scenes = [];
 var request = require('request');
+var refreshIntervalId = 0;
 
 // SETTINGS
 module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj, changedKeysArr, callback ) {
@@ -28,7 +29,7 @@ module.exports.pair = function( socket ) {
 			var jsonObject = JSON.parse(body);
 			if (jsonObject.status == 'ok') {
 				//true
-                Homey.log('HL added');
+                Homey.log('HeatLink added ' + device.data.id);
                 devices.push({
                   id: device.data.id,
                   name: device.name,
@@ -71,9 +72,11 @@ module.exports.init = function(devices_data, callback) {
 	callback (null, true);
 };
 
-module.exports.deleted = function( device_data ) {  
+module.exports.deleted = function( device_data ) {
+    clearInterval(refreshIntervalId);
+    console.log("--Stopped Polling--");  
+    devices = [];
     Homey.log('deleted: ' + JSON.stringify(device_data));
-    devices[0] = [];
 };
 
 
@@ -137,8 +140,14 @@ function getStatus(device, callback) {
       var rte = (response.heatlinks[0].rte.toFixed(1) * 2) / 2;
       var rsp = (response.heatlinks[0].rsp.toFixed(1) * 2) / 2;
       var tte = (response.heatlinks[0].tte.toFixed(1) * 2) / 2;
+      
+      if (typeof device.settings === 'undefined') {
+        var logip = 'undefined';
+      } else {
+        var logip = device.settings.homewizard_ip;
+      }
 
-      console.log(device.id);
+      console.log(device.id + ' - ' + logip);
       
       //Check current temperature
       if (devices[0].temperature != rte) {
@@ -177,8 +186,8 @@ function getStatus(device, callback) {
 }
 
 function startPolling() {
-  setInterval(function () {
-    console.log("--Start Polling--");
+  refreshIntervalId = setInterval(function () {
+    console.log("--Start Polling-- ");
     devices.forEach(function (device) {
       getStatus(device);
     })

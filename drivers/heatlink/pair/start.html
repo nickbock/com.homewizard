@@ -26,7 +26,7 @@ function saveSettings () {
         $('#save').prop('disabled', true);
         Homey.addDevice({
             data: { // this data object is saved to- and unique for the device. It is passed on the get and set functions as 1st argument
-                id: 'HL'+Math.floor(Date.now() / 1000)
+                id: device.data.id
             },
             settings: {
                 'homewizard_ip': device.settings.homewizard_ip,
