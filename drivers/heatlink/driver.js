@@ -29,7 +29,7 @@ module.exports.pair = function( socket ) {
 			var jsonObject = JSON.parse(body);
 			if (jsonObject.status == 'ok') {
 				//true
-                Homey.log('HL added');
+                Homey.log('HeatLink added ' + device.data.id);
                 devices.push({
                   id: device.data.id,
                   name: device.name,
