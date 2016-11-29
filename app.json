@@ -175,8 +175,8 @@
         "nl": "Heatlink"
       },
       "images": {
-        "large": "drivers/homewizard/assets/images/large.jpg",
-        "small": "drivers/homewizard/assets/images/small.jpg"
+        "large": "drivers/heatlink/assets/images/large.jpg",
+        "small": "drivers/heatlink/assets/images/small.jpg"
       },
       "class": "thermostat",
       "capabilities": [
