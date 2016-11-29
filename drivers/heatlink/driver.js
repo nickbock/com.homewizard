@@ -1,6 +1,7 @@
 var devices = [];
 var scenes = [];
 var request = require('request');
+var refreshIntervalId = 0;
 
 // SETTINGS
 module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj, changedKeysArr, callback ) {
@@ -71,9 +72,11 @@ module.exports.init = function(devices_data, callback) {
 	callback (null, true);
 };
 
-module.exports.deleted = function( device_data ) {  
+module.exports.deleted = function( device_data ) {
+    clearInterval(refreshIntervalId);
+    console.log("--Stopped Polling--");  
+    devices = [];
     Homey.log('deleted: ' + JSON.stringify(device_data));
-    devices[0] = [];
 };
 
 
@@ -183,8 +186,8 @@ function getStatus(device, callback) {
 }
 
 function startPolling() {
-  setInterval(function () {
-    console.log("--Start Polling--");
+  refreshIntervalId = setInterval(function () {
+    console.log("--Start Polling-- ");
     devices.forEach(function (device) {
       getStatus(device);
     })
