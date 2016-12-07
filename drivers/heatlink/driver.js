@@ -66,11 +66,7 @@ module.exports.init = function(devices_data, callback) {
             device.settings = settings;
 		    devices[device.id].settings = settings;
 		});
-	    
-//	    module.exports.getSettings(device, function(err, settings){
-//		    device.settings = settings;
-//            devices[device.id].settings = settings;
-//		});
+	
       devices.push(device);
 	});
   if (devices.length > 0) {
@@ -96,7 +92,7 @@ module.exports.capabilities = {
       if (device instanceof Error) return callback(device);
       console.log("measure_temperature");
       getStatus(device);
-      newvalue = devices[0].temperature;
+      newvalue = devices[device.id].temperature;
       // Callback ambient temperature
       //console.log(newvalue);
       callback(null, newvalue);
@@ -109,10 +105,10 @@ module.exports.capabilities = {
       console.log("target_temperature:get");
       // Retrieve updated data
       getStatus(device);
-      if (devices[0].setTemperature != 0) {
-        var newvalue = devices[0].setTemperature;
+      if (devices[device.id].setTemperature != 0) {
+        var newvalue = devices[device.id].setTemperature;
       } else {
-        var newvalue = devices[0].thermTemperature;
+        var newvalue = devices[device.id].thermTemperature;
       }
       callback(null, newvalue);
     },
@@ -143,8 +139,8 @@ module.exports.capabilities = {
 };
 
 function getStatus(device, callback) {
-    console.log('devices: '+devices);
-    console.log('device: '+device);
+    console.log(devices);
+    console.log(device);
     homewizard.call(devices, device.id, '/get-status', function(err, response) {
       if (err === null) {
         var output = [];
@@ -152,43 +148,43 @@ function getStatus(device, callback) {
         var rsp = (response.heatlinks[0].rsp.toFixed(1) * 2) / 2;
         var tte = (response.heatlinks[0].tte.toFixed(1) * 2) / 2;
         
-        if (typeof device.settings === 'undefined') {
+        if (typeof devices[device.id].settings === 'undefined') {
           var logip = 'undefined';
         } else {
-          var logip = device.settings.homewizard_ip;
+          var logip = devices[device.id].homewizard_ip;
         }
     
         console.log(device.id + ' - ' + logip);
         
         //Check current temperature
-        if (devices[0].temperature != rte) {
+        if (devices[device.id].temperature != rte) {
           console.log("New RTE - "+ rte);
           module.exports.realtime( { id: device.id }, "measure_temperature", rte );
-          devices[0].temperature = rte;    
+          devices[device.id].temperature = rte;    
         } else {
           console.log("RTE: no change");
         }
         
         //Check thermostat temperature
-        if (devices[0].thermTemperature != rsp) {
+        if (devices[device.id].thermTemperature != rsp) {
           console.log("New RSP - "+ rsp);
-          if (devices[0].setTemperature == 0) {
+          if (devices[device.id].setTemperature == 0) {
             module.exports.realtime( { id: device.id }, "target_temperature", rsp );
           }
-          devices[0].thermTemperature = rsp;    
+          devices[device.id].thermTemperature = rsp;    
         } else {
           console.log("RSP: no change");
         }
     
         //Check heatlink set temperature
-        if (devices[0].setTemperature != tte) {
+        if (devices[device.id].setTemperature != tte) {
           console.log("New TTE - "+ tte);
           if (tte > 0) {
             module.exports.realtime( { id: device.id }, "target_temperature", tte );
           } else {
-            module.exports.realtime( { id: device.id }, "target_temperature", devices[0].thermTemperature );
+            module.exports.realtime( { id: device.id }, "target_temperature", devices[device.id].thermTemperature );
           }
-          devices[0].setTemperature = tte;    
+          devices[device.id].setTemperature = tte;    
         } else {
           console.log("TTE: no change");
         }
