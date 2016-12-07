@@ -1,5 +1,5 @@
 # HomeWizard
-        
+#        
 This app let's you connect your HomeWizard to Homey. You can add your HomeWizard in the device section. Once done it will show up in the flow-editor, ready to be used!
 
 V0.0.8:
