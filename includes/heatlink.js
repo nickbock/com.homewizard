@@ -52,7 +52,9 @@ module.exports = {
             console.log("TTE: no change");
           }
         }
-      })
+      });
+      
+      return devices;
    },
    
    startPolling: function(devices) {

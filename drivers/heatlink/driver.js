@@ -88,8 +88,8 @@ module.exports.capabilities = {
   measure_temperature: {
     get: function (device, callback) {
       if (device instanceof Error) return callback(device);
-      console.log("measure_temperature")
-      heatlink.getStatus(devices, device);
+      console.log("measure_temperature");
+      devices = heatlink.getStatus(devices, device);
       newvalue = devices[0].temperature;
       // Callback ambient temperature
       //console.log(newvalue);
