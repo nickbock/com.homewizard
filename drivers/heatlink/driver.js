@@ -137,6 +137,8 @@ module.exports.capabilities = {
 };
 
 function getStatus(device, callback) {
+    console.log('devices: '+devices);
+    console.log('device: '+device);
     homewizard.call(devices, device.id, '/get-status', function(err, response) {
       if (err === null) {
         var output = [];
