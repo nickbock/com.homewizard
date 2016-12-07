@@ -3,7 +3,7 @@ var request = require('request');
 module.exports = {
    
    call: function(device_id, uri_part, callback) {
-      var debug = true;
+      var debug = false;
       var homewizard_ip = devices[device_id].settings.homewizard_ip;
       var homewizard_pass = devices[device_id].settings.homewizard_pass;
       if (debug) {
