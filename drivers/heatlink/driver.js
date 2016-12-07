@@ -1,7 +1,7 @@
 var devices = [];
 var scenes = [];
-var homewizard = require('./../../includes/homewizard.js');
-var heatlink = require('./../../includes/heatlink.js');
+var homewizard = require('./../../includes/homewizard.js')(devices);
+var heatlink = require('./../../includes/heatlink.js')(devices);
 var request = require('request');
 var refreshIntervalId = 0;
 
