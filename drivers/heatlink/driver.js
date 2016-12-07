@@ -60,11 +60,17 @@ module.exports.init = function(devices_data, callback) {
     callback (null, true);
 	devices_data.forEach(function initdevice(device) {
 	    Homey.log('add device: ' + JSON.stringify(device));
-	    
-	    module.exports.getSettings(device, function(err, settings){
-		    device.settings = settings;
         
+        devices[device.id] = device;
+	    module.exports.getSettings(device, function(err, settings){
+            device.settings = settings;
+		    devices[device.id].settings = settings;
 		});
+	    
+//	    module.exports.getSettings(device, function(err, settings){
+//		    device.settings = settings;
+//            devices[device.id].settings = settings;
+//		});
       devices.push(device);
 	});
   if (devices.length > 0) {
