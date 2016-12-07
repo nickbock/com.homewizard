@@ -3,8 +3,8 @@ var request = require('request');
 
 module.exports = {
    
-   getStatus: function(devices,device, devices, callback) {
-      homewizard.call( device, '/get-status', function(err, response) {
+   getStatus: function(devices, device, callback) {
+      homewizard.call(devices, device, '/get-status', function(err, response) {
         if (err === null) {
           var output = [];
           var rte = (response.heatlinks[0].rte.toFixed(1) * 2) / 2;
@@ -59,7 +59,7 @@ module.exports = {
       refreshIntervalId = setInterval(function () {
         console.log("--Start Polling-- ");
         devices.forEach(function (device) {
-          this.getStatus(device);
+          this.getStatus(devices, device);
         })
       }, 1000 * 10);
     },
