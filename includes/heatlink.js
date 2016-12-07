@@ -3,7 +3,7 @@ var request = require('request');
 
 module.exports = {
    
-   getStatus: function(device, callback) {
+   getStatus: function(devices,device, devices, callback) {
       homewizard.call( device, '/get-status', function(err, response) {
         if (err === null) {
           var output = [];
@@ -55,7 +55,7 @@ module.exports = {
       })
    },
    
-   startPolling: function() {
+   startPolling: function(devices) {
       refreshIntervalId = setInterval(function () {
         console.log("--Start Polling-- ");
         devices.forEach(function (device) {

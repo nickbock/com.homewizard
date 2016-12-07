@@ -1,7 +1,7 @@
 var devices = [];
 var scenes = [];
-var homewizard = require('./../../includes/homewizard.js')(devices);
-var heatlink = require('./../../includes/heatlink.js')(devices);
+var homewizard = require('./../../includes/homewizard.js');
+var heatlink = require('./../../includes/heatlink.js');
 var request = require('request');
 var refreshIntervalId = 0;
 
@@ -39,7 +39,7 @@ module.exports.pair = function( socket ) {
                 })
                 callback( null, devices );
                 socket.emit("success", device);
-                heatlink.startPolling();
+                heatlink.startPolling(devices);
 			} else {
 				//false
                 socket.emit("error", "no response");
@@ -57,6 +57,7 @@ module.exports.pair = function( socket ) {
 }
 
 module.exports.init = function(devices_data, callback) {
+    callback (null, true);
 	devices_data.forEach(function initdevice(device) {
 	    Homey.log('add device: ' + JSON.stringify(device));
 	    
@@ -67,7 +68,7 @@ module.exports.init = function(devices_data, callback) {
       devices.push(device);
 	});
   if (devices.length > 0) {
-    heatlink.startPolling()
+    heatlink.startPolling(devices)
   }
 	Homey.log('Heatlink driver init done');
 
@@ -88,7 +89,7 @@ module.exports.capabilities = {
     get: function (device, callback) {
       if (device instanceof Error) return callback(device);
       console.log("measure_temperature")
-      heatlink.getStatus(device);
+      heatlink.getStatus(devices, device);
       newvalue = devices[0].temperature;
       // Callback ambient temperature
       //console.log(newvalue);
@@ -101,7 +102,7 @@ module.exports.capabilities = {
       if (device instanceof Error) return callback(device);
       console.log("target_temperature:get");
       // Retrieve updated data
-      heatlink.getStatus(device);
+      heatlink.getStatus(devices, device);
       if (devices[0].setTemperature != 0) {
         var newvalue = devices[0].setTemperature;
       } else {

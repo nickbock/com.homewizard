@@ -1,8 +1,8 @@
 var request = require('request');
 
-module.exports = function(devices) {
+module.exports = {
    
-   call: function(device_id, uri_part, callback) {
+   call: function(devices, device_id, uri_part, callback) {
       var debug = false;
       var homewizard_ip = devices[device_id].settings.homewizard_ip;
       var homewizard_pass = devices[device_id].settings.homewizard_pass;
@@ -53,7 +53,7 @@ module.exports = function(devices) {
       });
    },
    
-   ledring_pulse: function(device_id, colorName) {
+   ledring_pulse: function(devices, device_id, colorName) {
       var homewizard_ledring = devices[device_id].settings.homewizard_ledring;
       if (homewizard_ledring) {
         Homey.manager('ledring').animate(

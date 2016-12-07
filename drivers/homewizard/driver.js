@@ -1,6 +1,6 @@
 var devices = [];
 var scenes = [];
-var homewizard = require('./../../includes/homewizard.js')(devices);
+var homewizard = require('./../../includes/homewizard.js');
 var request = require('request');
 
 // SETTINGS
@@ -73,14 +73,14 @@ module.exports.deleted = function( device_data ) {
 
 // SCENES
 Homey.manager('flow').on('action.switch_scene_on.scene.autocomplete', function( callback, args ){
-    homewizard.getScenes( args, function(err, response) {
+    homewizard.getScenes(args, function(err, response) {
       callback(err, response ); // err, results
     });
 });
 
 Homey.manager('flow').on('action.switch_scene_on', function( callback, args ){
     var uri = '/gp/' + args.scene.id + '/on';
-    homewizard.call(args.device.id, uri, function(err, response) {
+    homewizard.call(devices, args.device.id, uri, function(err, response) {
       if (err === null) {
         Homey.log('Scene is on');
         callback( null, true );
@@ -91,14 +91,14 @@ Homey.manager('flow').on('action.switch_scene_on', function( callback, args ){
 });  
 
 Homey.manager('flow').on('action.switch_scene_off.scene.autocomplete', function( callback, args ){
-    homewizard.getScenes( args, function(err, response) {
+    homewizard.getScenes(args, function(err, response) {
       callback(err, response ); // err, results
     });
 });
 
 Homey.manager('flow').on('action.switch_scene_off', function( callback, args ){
     var uri = '/gp/' + args.scene.id + '/off';
-    homewizard.call(args.device.id, uri, function(err, response) {
+    homewizard.call(devices, args.device.id, uri, function(err, response) {
       if (err === null) {
         Homey.log('Scene is off');
         callback( null, true );
@@ -111,7 +111,7 @@ Homey.manager('flow').on('action.switch_scene_off', function( callback, args ){
 
 // PRESETS
 Homey.manager('flow').on('condition.check_preset', function( callback, args ){
-    homewizard.call(args.device.id, '/get-status/', function(err, response) {
+    homewizard.call(devices, args.device.id, '/get-status/', function(err, response) {
       if (err === null) {
         if (response.preset == args.preset) {
             Homey.log('Yes, preset is: '+ response.preset+'!');
@@ -133,12 +133,12 @@ Homey.manager('flow').on('condition.check_preset', function( callback, args ){
 	
 Homey.manager('flow').on('action.set_preset', function( callback, args ){
     var uri = '/preset/' + args.preset;
-    homewizard.call(args.device.id, uri, function(err, response) {
+    homewizard.call(devices, args.device.id, uri, function(err, response) {
       if (err === null) {
-        homewizard.ledring_pulse(args.device.id, 'green');
+        homewizard.ledring_pulse(devices, args.device.id, 'green');
         callback(null, true);
       } else {
-        homewizard.ledring_pulse(args.device.id, 'red');
+        homewizard.ledring_pulse(devices, args.device.id, 'red');
         callback(err, false); // err
       }
     });
