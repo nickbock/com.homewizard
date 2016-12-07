@@ -137,7 +137,7 @@ module.exports.capabilities = {
 };
 
 function getStatus(device, callback) {
-    homewizard.call(devices, device, '/get-status', function(err, response) {
+    homewizard.call(devices, device.id, '/get-status', function(err, response) {
       if (err === null) {
         var output = [];
         var rte = (response.heatlinks[0].rte.toFixed(1) * 2) / 2;
