@@ -55,7 +55,6 @@ module.exports.pair = function( socket ) {
 }
 
 module.exports.init = function(devices_data, callback) {
-    Homey.log(homewizard.sayHelloInEnglish());
 	devices_data.forEach(function initdevice(device) {
 	    Homey.log('add device: ' + JSON.stringify(device));
 	    devices[device.id] = device;

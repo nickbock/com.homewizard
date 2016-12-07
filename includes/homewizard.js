@@ -71,32 +71,4 @@ module.exports = {
       }
    },
    
-   sayHelloInEnglish: function() {
-     return this.sayHelloInSpanish();
-   },
-        
-   sayHelloInSpanish: function() {
-     return "Hola";
-   }
 };
-
-
-//module.exports.homewizard = (function(){
-//call = (function(){
-//   var homewizard = {};
-//
-//   homewizard.settings = function() {
-//
-//   }
-//
-//   homewizard.call = function(){
-//       
-//   };
-//   
-//   self.getScenes = function(){
-//   
-//   };
-//   
-//   
-//   return self;
-//})();
