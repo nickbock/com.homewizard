@@ -1,6 +1,6 @@
 var devices = [];
 var scenes = [];
-var homewizard = require('./../../includes/homewizard.js');
+var homewizard = require('./../../includes/homewizard.js')(devices);
 var request = require('request');
 
 // SETTINGS
