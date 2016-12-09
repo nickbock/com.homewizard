@@ -37,6 +37,7 @@ module.exports.pair = function( socket ) {
                   settings: device.settings,
                   capabilities: device.capabilities
                 }
+                homewizard.setDevices(devices);
                 callback( null, devices );
                 socket.emit("success", device);
 			} else {
@@ -105,7 +106,7 @@ Homey.manager('flow').on('action.switch_scene_off.scene.autocomplete', function(
 
 Homey.manager('flow').on('action.switch_scene_off', function( callback, args ){
     var uri = '/gp/' + args.scene.id + '/off';
-    homewizard.call(devices, args.device.id, uri, function(err, response) {
+    homewizard.call(args.device.id, uri, function(err, response) {
       if (err === null) {
         Homey.log('Scene is off');
         callback( null, true );
@@ -118,7 +119,7 @@ Homey.manager('flow').on('action.switch_scene_off', function( callback, args ){
 
 // PRESETS
 Homey.manager('flow').on('condition.check_preset', function( callback, args ){
-    homewizard.call(devices, args.device.id, '/get-status/', function(err, response) {
+    homewizard.call(args.device.id, '/get-status/', function(err, response) {
       if (err === null) {
         if (response.preset == args.preset) {
             Homey.log('Yes, preset is: '+ response.preset+'!');
@@ -140,12 +141,12 @@ Homey.manager('flow').on('condition.check_preset', function( callback, args ){
 	
 Homey.manager('flow').on('action.set_preset', function( callback, args ){
     var uri = '/preset/' + args.preset;
-    homewizard.call(devices, args.device.id, uri, function(err, response) {
+    homewizard.call(args.device.id, uri, function(err, response) {
       if (err === null) {
-        homewizard.ledring_pulse(devices, args.device.id, 'green');
+        homewizard.ledring_pulse(args.device.id, 'green');
         callback(null, true);
       } else {
-        homewizard.ledring_pulse(devices, args.device.id, 'red');
+        homewizard.ledring_pulse(args.device.id, 'red');
         callback(err, false); // err
       }
     });

@@ -29,8 +29,8 @@ module.exports = (function(){
    
    homewizard.call = function(device_id, uri_part, callback) {
       
-      var homewizard_ip = devices[device_id].settings.homewizard_ip;
-      var homewizard_pass = devices[device_id].settings.homewizard_pass;
+      var homewizard_ip = self.devices[device_id].settings.homewizard_ip;
+      var homewizard_pass = self.devices[device_id].settings.homewizard_pass;
       if (debug) {
          //callback(null, this.);
       } else {
@@ -81,8 +81,8 @@ module.exports = (function(){
       });
    }
    
-   homewizard.ledring_pulse = function(devices, device_id, colorName) {
-      var homewizard_ledring = devices[device_id].settings.homewizard_ledring;
+   homewizard.ledring_pulse = function(device_id, colorName) {
+      var homewizard_ledring =  self.devices[device_id].settings.homewizard_ledring;
       if (homewizard_ledring) {
         Homey.manager('ledring').animate(
             'pulse', // animation name (choose from loading, pulse, progress, solid) 
