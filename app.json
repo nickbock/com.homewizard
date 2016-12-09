@@ -173,38 +173,6 @@
   },
   "drivers": [
     {
-      "id": "heatlink",
-      "name": {
-        "en": "Heatlink",
-        "nl": "Heatlink"
-      },
-      "images": {
-        "large": "drivers/heatlink/assets/images/large.jpg",
-        "small": "drivers/heatlink/assets/images/small.jpg"
-      },
-      "class": "thermostat",
-      "capabilities": [
-        "measure_temperature",
-        "target_temperature"
-      ],
-      "pair": [
-        {
-          "id": "start"
-        },
-        {
-          "id": "list_my_devices",
-          "template": "list_devices",
-          "navigation": {
-            "next": "add_my_devices"
-          }
-        },
-        {
-          "id": "add_my_devices",
-          "template": "add_devices"
-        }
-      ]
-    },
-    {
       "id": "homewizard",
       "name": {
         "en": "HomeWizard",

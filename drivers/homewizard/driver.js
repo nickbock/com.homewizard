@@ -10,6 +10,7 @@ module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj,
 	    changedKeysArr.forEach(function (key) {
 		    devices[device_data.id].settings[key] = newSettingsObj[key];
 		});
+        homewizard.setDevices(devices);
 		callback(null, true);
     } catch (error) {
       callback(error); 
@@ -55,13 +56,19 @@ module.exports.pair = function( socket ) {
 }
 
 module.exports.init = function(devices_data, callback) {
-	devices_data.forEach(function initdevice(device) {
-	    Homey.log('add device: ' + JSON.stringify(device));
-	    devices[device.id] = device;
-	    module.exports.getSettings(device, function(err, settings){
-		    devices[device.id].settings = settings;
-		});
-	});
+    if (homewizard.debug) {
+        devices_data = homewizard.debug_devices_data;
+    }
+    
+    devices_data.forEach(function initdevice(device) {
+        Homey.log('add device: ' + JSON.stringify(device));
+        devices[device.id] = device;
+        module.exports.getSettings(device, function(err, settings){
+            devices[device.id].settings = settings;
+        });
+        homewizard.setDevices(devices);
+    });   
+    
 	Homey.log('HomeWizard driver init done');
 	callback (null, true);
 };
