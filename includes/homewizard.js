@@ -23,17 +23,13 @@ module.exports = (function(){
       self.devices = devices;
    };
    
-   homewizard.logDevices = function(devices){
+   homewizard.getDevices = function(devices){
       Homey.log(self.devices);
    };
    
    homewizard.call = function(device_id, uri_part, callback) {
-      
       var homewizard_ip = self.devices[device_id].settings.homewizard_ip;
       var homewizard_pass = self.devices[device_id].settings.homewizard_pass;
-      if (debug) {
-         //callback(null, this.);
-      } else {
          request({
             //if(typeof uri_part === undefined) {
             //   uri_part = '/get-status/';
@@ -60,7 +56,6 @@ module.exports = (function(){
               Homey.log('Error: '+error);
             }
         });   
-      }
    }
    
    homewizard.getScenes = function(args, callback) {

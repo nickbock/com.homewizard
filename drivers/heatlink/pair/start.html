@@ -1,4 +1,12 @@
 <script>
+$( document ).ready(function() {
+	Homey.emit('get_homewizards');
+
+	Homey.on('hw_devices', function(hw_devices){
+        Homey.log(hw_devices);
+    });
+});
+
 function saveSettings () {
     $('#error').html('');
 	$('#save').prop('disabled', true);
