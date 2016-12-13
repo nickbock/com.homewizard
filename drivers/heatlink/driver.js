@@ -12,6 +12,7 @@ module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj,
 	    changedKeysArr.forEach(function (key) {
 		    devices[device_data.id].settings[key] = newSettingsObj[key];
 		});
+        heatlink.setDevices(devices);
 		callback(null, true);
     } catch (error) {
       callback(error); 
@@ -20,40 +21,31 @@ module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj,
 
 module.exports.pair = function( socket ) {
     socket.on('get_homewizards', function (device, callback) {
-        Homey.log('get_homewizards received');
-        socket.emit("hw_devices", homewizard.getDevices());
+        homewizard.getDevices(function(homewizard_devices) {
+            
+            Homey.log(homewizard_devices);
+            var hw_devices = {};
+            Object.keys(homewizard_devices).forEach(function(key) {
+                hw_devices[key] = homewizard_devices[key];
+            });
+            
+            socket.emit('hw_devices', hw_devices);
+        });
     });
     
-    socket.on('manual_add', function (device, callback) {
-        var url = 'http://' + device.settings.homewizard_ip + '/' + device.settings.homewizard_pass + '/get-status/';
-        //Homey.log('Calling '+ url);
-        request(url, function (error, response, body) {
-          if (response === null || response === undefined) {
-            socket.emit("error", "http error");
-            return;
-          }
-		  if (!error && response.statusCode == 200) {
-			var jsonObject = JSON.parse(body);
-			if (jsonObject.status == 'ok') {
-				//true
-                Homey.log('HeatLink added ' + device.data.id);
-                devices[device.data.id] = {
-                  id: device.data.id,
-                  name: device.name,
-                  settings: device.settings
-                }
-                callback( null, devices );
-                socket.emit("success", device);
-                heatlink.startPolling();
-			} else {
-				//false
-                socket.emit("error", "no response");
-			}
-		  } else {
-			// false
-            socket.emit("error", "http error: "+response.statusCode);
-		  }
-		});
+    socket.on('manual_add', function (device, callback) {                
+        //true
+        Homey.log('HeatLink added ' + device.data.id);
+        devices[device.data.id] = {
+          id: device.data.id,
+          name: device.name,
+          settings: device.settings,
+          capabilities: device.capabilities
+        }
+        heatlink.setDevices(devices);
+        callback( null, devices );
+        socket.emit("success", device);
+        heatlink.startPolling();
     });
     
     socket.on('disconnect', function(){
@@ -62,20 +54,16 @@ module.exports.pair = function( socket ) {
 }
 
 module.exports.init = function(devices_data, callback) {
-    callback (null, true);
-	devices_data.forEach(function initdevice(device) {
-	    Homey.log('add device: ' + JSON.stringify(device));
-        
+    devices_data.forEach(function initdevice(device) {
+        Homey.log('add device: ' + JSON.stringify(device));
         devices[device.id] = device;
-	    module.exports.getSettings(device, function(err, settings){
-            device.settings = settings;
-		    devices[device.id].settings = settings;
-		});
-	
-      devices.push(device);
-	});
+        module.exports.getSettings(device, function(err, settings){
+            devices[device.id].settings = settings;
+        });
+    });
+    heatlink.setDevices(devices);
   if (devices.length > 0) {
-    heatlink.startPolling(devices)
+    heatlink.startPolling();
   }
 	Homey.log('Heatlink driver init done');
 
@@ -86,6 +74,7 @@ module.exports.deleted = function( device_data ) {
     clearInterval(refreshIntervalId);
     console.log("--Stopped Polling--");  
     devices = [];
+    heatlink.setDevices(devices);
     Homey.log('deleted: ' + JSON.stringify(device_data));
 };
 
@@ -96,7 +85,7 @@ module.exports.capabilities = {
     get: function (device, callback) {
       if (device instanceof Error) return callback(device);
       console.log("measure_temperature");
-      getStatus(device);
+      heatlink.getStatus(device);
       newvalue = devices[device.id].temperature;
       // Callback ambient temperature
       //console.log(newvalue);
@@ -109,7 +98,7 @@ module.exports.capabilities = {
       if (device instanceof Error) return callback(device);
       console.log("target_temperature:get");
       // Retrieve updated data
-      getStatus(device);
+      heatlink.getStatus(device);
       if (devices[device.id].setTemperature != 0) {
         var newvalue = devices[device.id].setTemperature;
       } else {

@@ -3,26 +3,24 @@ $( document ).ready(function() {
 	Homey.emit('get_homewizards');
 
 	Homey.on('hw_devices', function(hw_devices){
-        Homey.log(hw_devices);
+		//$('#homewizard_select option').remove();
+		$.each(hw_devices, function( index, value ) {
+			$('#homewizard_select').append($("<option>").attr('value',value.id).text(value.settings.homewizard_ip));
+		});
+        console.log(hw_devices);
     });
 });
 
 function saveSettings () {
     $('#error').html('');
 	$('#save').prop('disabled', true);
-    if ($('#homewizard_ledring').is(":checked")) {
-        var homewizard_ledring = true;   
-    } else {
-        var homewizard_ledring = false;   
-    }
+	console.log('MA');
 	Homey.emit('manual_add', {
 	    data: { // this data object is saved to- and unique for the device. It is passed on the get and set functions as 1st argument
-	        id: 'HL'+Math.floor(Date.now() / 1000)
+	        id: 'HW_HL'+Math.floor(Date.now() / 1000)
 	    },
-	    settings: {
-		    'homewizard_ip': $('#homewizard_ip').val(),
-		    'homewizard_pass': $('#homewizard_pass').val(),
-            'homewizard_ledring': homewizard_ledring
+		settings: {
+		    'homewizard_id': $('#homewizard_select').val(),
 	    },
 	    name: 'Heatlink',
 	}, function( err, result ){
@@ -30,19 +28,18 @@ function saveSettings () {
 	});
     
     Homey.on('success', function(device){
-		$('#error').html('Connected, saving...');
+		$('#error').html('Saving...');
         $('#save').prop('disabled', true);
+		console.log('success');
+		console.log(device);
         Homey.addDevice({
             data: { // this data object is saved to- and unique for the device. It is passed on the get and set functions as 1st argument
                 id: device.data.id
             },
-            settings: {
-                'homewizard_ip': device.settings.homewizard_ip,
-                'homewizard_pass': device.settings.homewizard_pass,
-                'homewizard_ledring': device.settings.homewizard_ledring,
+			settings: {
+                'homewizard_id': device.settings.homewizard_id,
             },
             name: device.name
-            
         }, function( err, result ){
             if( err ) return console.error(err);
             Homey.done();
@@ -78,19 +75,11 @@ function saveSettings () {
         </style>
     </head>
     <body>
-        <p data-i18n="settings.intro"></p>
+        <p data-i18n="settings.heatlink_intro"></p>
             <div class="field row">
-                <label for="homewizard_ip">HomeWizard's IP</label>
-                <input id="homewizard_ip" type="text" value="" />
-            </div>
-            <div class="field row">
-                <label for="homewizard_pass" data-i18n="settings.password"></label>
-                <input id="homewizard_pass" type="password" value="" />
-            </div>
-            <br>
-            <div class="field row">
-                <label for="homewizard_ledring" data-i18n="settings.use_ledring"></label>
-                <input type="checkbox" id="homewizard_ledring" /><br><br><em data-i18n="settings.use_ledring_explain"></em>
+				<select id="homewizard_select">
+					<option>Zoeken naar Homewizards</option>
+				</select>
             </div>
             <br>
             <p id="error"></p>
