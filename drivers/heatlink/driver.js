@@ -138,6 +138,10 @@ function getStatus(device, callback) {
         var rsp = (response.heatlinks[0].rsp.toFixed(1) * 2) / 2;
         var tte = (response.heatlinks[0].tte.toFixed(1) * 2) / 2;
         
+        Homey.log('New RTE: '+rte);
+        Homey.log('New RSP: '+rsp);
+        Homey.log('New TTE: '+tte);
+        
         //Check current temperature
         if (devices[device.id].temperature != rte) {
           console.log("New RTE - "+ rte);
