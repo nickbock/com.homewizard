@@ -30,8 +30,6 @@ function saveSettings () {
     Homey.on('success', function(device){
 		$('#error').html('Saving...');
         $('#save').prop('disabled', true);
-		console.log('success');
-		console.log(device);
         Homey.addDevice({
             data: { // this data object is saved to- and unique for the device. It is passed on the get and set functions as 1st argument
                 id: device.data.id
