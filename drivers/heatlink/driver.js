@@ -71,7 +71,7 @@ module.exports.init = function(devices_data, callback) {
 
 module.exports.deleted = function( device_data ) {
     clearInterval(refreshIntervalId);
-    console.log("--Stopped Polling--");  
+    Homey.log("--Stopped Polling--");  
     devices = [];
     Homey.log('deleted: ' + JSON.stringify(device_data));
 };
@@ -139,10 +139,6 @@ function getStatus(device, callback) {
         var rsp = (response.heatlinks[0].rsp.toFixed(1) * 2) / 2;
         var tte = (response.heatlinks[0].tte.toFixed(1) * 2) / 2;
         
-        Homey.log('New RTE: '+rte);
-        Homey.log('New RSP: '+rsp);
-        Homey.log('New TTE: '+tte);
-        
         //Check current temperature
         if (devices[device.id].temperature != rte) {
           console.log("New RTE - "+ rte);
@@ -181,7 +177,7 @@ function getStatus(device, callback) {
  
  function startPolling() {
     refreshIntervalId = setInterval(function () {
-      console.log("--Start Polling-- ");
+      Homey.log("--Start Polling-- ");
       devices.forEach(function (device) {
         getStatus(device);
       })
