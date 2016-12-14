@@ -113,7 +113,8 @@ function startPolling() {
 }
 
 function getStatus(device, callback) {
-   homewizard.call(devices, device.id, '/get-status', function(err, response) {
+    var homewizard_id = devices[device.id].settings.homewizard_id;
+   homewizard.call(homewizard_id, '/get-status', function(err, response) {
     if (err === null) {
       var output = [];
       try {
