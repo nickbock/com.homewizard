@@ -120,7 +120,8 @@ module.exports.capabilities = {
         temperature = Math.round(temperature.toFixed(1) * 2) / 2;
         var url = '/hl/0/settarget/'+temperature;
         console.log(url);
-        homewizard.call(device, '/hl/0/settarget/'+temperature, function(err, response) {
+        var homewizard_id = devices[device.id].settings.homewizard_id;
+        homewizard.call(homewizard_id, '/hl/0/settarget/'+temperature, function(err, response) {
             console.log(err);
             if (callback) callback(err, temperature);
           }
