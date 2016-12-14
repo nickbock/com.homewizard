@@ -1,5 +1,6 @@
 var homewizard = require('./../../includes/homewizard.js');
 var request = require('request');
+var homey_exports = module.exports;
 
 module.exports = (function(){
    var heatlink = {};
@@ -33,7 +34,7 @@ module.exports = (function(){
           //Check current temperature
           if (self.devices[device.id].temperature != rte) {
             console.log("New RTE - "+ rte);
-            //module.exports.realtime( { id: device.id }, "measure_temperature", rte );
+            homey_exports.realtime( { id: device.id }, "measure_temperature", rte );
             self.devices[device.id].temperature = rte;    
           } else {
             console.log("RTE: no change");
@@ -43,7 +44,7 @@ module.exports = (function(){
           if (self.devices[device.id].thermTemperature != rsp) {
             console.log("New RSP - "+ rsp);
             if (self.devices[device.id].setTemperature == 0) {
-              //module.exports.realtime( { id: device.id }, "target_temperature", rsp );
+              homey_exports.realtime( { id: device.id }, "target_temperature", rsp );
             }
             self.devices[device.id].thermTemperature = rsp;    
           } else {
@@ -54,9 +55,9 @@ module.exports = (function(){
           if (self.devices[device.id].setTemperature != tte) {
             console.log("New TTE - "+ tte);
             if (tte > 0) {
-              //module.exports.realtime( { id: device.id }, "target_temperature", tte );
+              homey_exports.realtime( { id: device.id }, "target_temperature", tte );
             } else {
-              //module.exports.realtime( { id: device.id }, "target_temperature", self.devices[device.id].thermTemperature );
+              homey_exports.realtime( { id: device.id }, "target_temperature", self.devices[device.id].thermTemperature );
             }
             self.devices[device.id].setTemperature = tte;    
           } else {
