@@ -139,34 +139,34 @@ function getStatus(device, callback) {
         var tte = (response.heatlinks[0].tte.toFixed(1) * 2) / 2;
         
         //Check current temperature
-        if (devices[homewizard_id].temperature != rte) {
+        if (devices[device.id].temperature != rte) {
           console.log("New RTE - "+ rte);
-          module.exports.realtime( { id: homewizard_id }, "measure_temperature", rte );
-          devices[homewizard_id].temperature = rte;    
+          module.exports.realtime( { id: device.id }, "measure_temperature", rte );
+          devices[device.id].temperature = rte;    
         } else {
           console.log("RTE: no change");
         }
         
         //Check thermostat temperature
-        if (devices[homewizard_id].thermTemperature != rsp) {
+        if (devices[device.id].thermTemperature != rsp) {
           console.log("New RSP - "+ rsp);
-          if (devices[homewizard_id].setTemperature == 0) {
-            module.exports.realtime( { id: homewizard_id }, "target_temperature", rsp );
+          if (devices[device.id].setTemperature == 0) {
+            module.exports.realtime( { id: device.id }, "target_temperature", rsp );
           }
-          devices[homewizard_id].thermTemperature = rsp;    
+          devices[device.id].thermTemperature = rsp;    
         } else {
           console.log("RSP: no change");
         }
     
         //Check heatlink set temperature
-        if (devices[homewizard_id].setTemperature != tte) {
+        if (devices[device.id].setTemperature != tte) {
           console.log("New TTE - "+ tte);
           if (tte > 0) {
-            module.exports.realtime( { id: homewizard_id }, "target_temperature", tte );
+            module.exports.realtime( { id: device.id }, "target_temperature", tte );
           } else {
-            module.exports.realtime( { id: homewizard_id }, "target_temperature", devices[homewizard_id].thermTemperature );
+            module.exports.realtime( { id: device.id }, "target_temperature", devices[device.id].thermTemperature );
           }
-          devices[homewizard_id].setTemperature = tte;    
+          devices[device.id].setTemperature = tte;    
         } else {
           console.log("TTE: no change");
         }
