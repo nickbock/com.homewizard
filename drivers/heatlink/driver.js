@@ -1,7 +1,6 @@
 var devices = [];
 var scenes = [];
 var homewizard = require('./../../includes/homewizard.js');
-//var heatlink = require('./../../includes/heatlink.js');
 var request = require('request');
 var refreshIntervalId = 0;
 
@@ -12,7 +11,6 @@ module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj,
 	    changedKeysArr.forEach(function (key) {
 		    devices[device_data.id].settings[key] = newSettingsObj[key];
 		});
-        //heatlink.setDevices(devices);
 		callback(null, true);
     } catch (error) {
       callback(error); 
@@ -33,20 +31,21 @@ module.exports.pair = function( socket ) {
         });
     });
     
-    socket.on('manual_add', function (device, callback) {                
-        //true
-        Homey.log('HeatLink added ' + device.data.id);
-        devices[device.data.id] = {
-          id: device.data.id,
-          name: device.name,
-          settings: device.settings,
-          //capabilities: device.capabilities
+    socket.on('manual_add', function (device, callback) {        
+        if (device.settings.homewizard_id.indexOf('HW_') === -1 && device.settings.homewizard_id.indexOf('HW') === 0) {
+            //true
+            Homey.log('HeatLink added ' + device.data.id);
+            devices[device.data.id] = {
+              id: device.data.id,
+              name: device.name,
+              settings: device.settings,
+            }
+            callback( null, devices );
+            socket.emit("success", device);
+            startPolling();   
+        } else {
+            socket.emit("error", "No valid HomeWizard found, re-pair if problem persists");
         }
-        //heatlink.setDevices(devices);
-        callback( null, devices );
-        socket.emit("success", device);
-        //heatlink.startPolling();
-        startPolling();
     });
     
     socket.on('disconnect', function(){
@@ -62,9 +61,7 @@ module.exports.init = function(devices_data, callback) {
             devices[device.id].settings = settings;
         });
     });
-    //heatlink.setDevices(devices);
   if (devices.length > 0) {
-    //heatlink.startPolling();
     startPolling();
   }
 	Homey.log('Heatlink driver init done');
@@ -76,7 +73,6 @@ module.exports.deleted = function( device_data ) {
     clearInterval(refreshIntervalId);
     console.log("--Stopped Polling--");  
     devices = [];
-    //heatlink.setDevices(devices);
     Homey.log('deleted: ' + JSON.stringify(device_data));
 };
 
@@ -90,7 +86,6 @@ module.exports.capabilities = {
       getStatus(device);
       newvalue = devices[device.id].temperature;
       // Callback ambient temperature
-      //console.log(newvalue);
       callback(null, newvalue);
     }
   },
@@ -142,14 +137,6 @@ function getStatus(device, callback) {
         var rte = (response.heatlinks[0].rte.toFixed(1) * 2) / 2;
         var rsp = (response.heatlinks[0].rsp.toFixed(1) * 2) / 2;
         var tte = (response.heatlinks[0].tte.toFixed(1) * 2) / 2;
-        
-        if (typeof devices[device.id].settings === 'undefined') {
-          var logip = 'undefined';
-        } else {
-          var logip = devices[device.id].homewizard_ip;
-        }
-    
-        //console.log(device.id + ' - ' + logip);
         
         //Check current temperature
         if (devices[device.id].temperature != rte) {

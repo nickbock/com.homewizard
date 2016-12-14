@@ -2,6 +2,10 @@
 #        
 This app let's you connect your HomeWizard to Homey. You can add your HomeWizard in the device section. Once done it will show up in the flow-editor, ready to be used!
 
+V0.0.9:
+
+* Energylink + Wattcher support added (credits: Jeroen Tebbens)
+
 V0.0.8:
 
 * Heatlink support added (credits: Nick Bockmeulen)

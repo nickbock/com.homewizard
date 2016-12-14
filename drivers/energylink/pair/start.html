@@ -15,12 +15,12 @@ function saveSettings () {
 	console.log('MA');
 	Homey.emit('manual_add', {
 	    data: { // this data object is saved to- and unique for the device. It is passed on the get and set functions as 1st argument
-	        id: 'HW_HL'+Math.floor(Date.now() / 1000)
+	        id: 'HW_EL'+Math.floor(Date.now() / 1000)
 	    },
 		settings: {
 		    'homewizard_id': $('#homewizard_select').val(),
 	    },
-	    name: 'Heatlink',
+	    name: 'Enerylink',
 	}, function( err, result ){
 	    if( err ) return console.error(err);
 	});
@@ -71,7 +71,7 @@ function saveSettings () {
         </style>
     </head>
     <body>
-        <p data-i18n="settings.heatlink_intro"></p>
+        <p data-i18n="settings.energylink_intro"></p>
             <div class="field row">
 				<select id="homewizard_select">
 					<option>Select HomeWizard</option>
