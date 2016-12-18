@@ -5,6 +5,7 @@ This app let's you connect your HomeWizard to Homey. You can add your HomeWizard
 V0.0.9:
 
 * Energylink + Wattcher support added (credits: Jeroen Tebbens)
+SIDENOTE: All current paired devices (expect HomeWizard) should be re-paired!
 
 V0.0.8:
 
