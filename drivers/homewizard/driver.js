@@ -1,5 +1,4 @@
 var devices = [];
-var scenes = [];
 var homewizard = require('./../../includes/homewizard.js');
 var request = require('request');
 
@@ -36,7 +35,7 @@ module.exports.pair = function( socket ) {
                   name: device.name,
                   settings: device.settings,
                   capabilities: device.capabilities
-                }
+                };
                 homewizard.setDevices(devices);
                 callback( null, devices );
                 socket.emit("success", device);
@@ -53,7 +52,7 @@ module.exports.pair = function( socket ) {
     
     socket.on('disconnect', function(){
         console.log("User aborted pairing, or pairing is finished");
-    })
+    });
 }
 
 module.exports.init = function(devices_data, callback) {
@@ -87,8 +86,7 @@ Homey.manager('flow').on('action.switch_scene_on.scene.autocomplete', function( 
 });
 
 Homey.manager('flow').on('action.switch_scene_on', function( callback, args ){
-    var uri = '/gp/' + args.scene.id + '/on';
-    homewizard.call(devices, args.device.id, uri, function(err, response) {
+    homewizard.call(devices, args.device.id, '/gp/' + args.scene.id + '/on', function(err, response) {
       if (err === null) {
         Homey.log('Scene is on');
         callback( null, true );
@@ -105,8 +103,7 @@ Homey.manager('flow').on('action.switch_scene_off.scene.autocomplete', function(
 });
 
 Homey.manager('flow').on('action.switch_scene_off', function( callback, args ){
-    var uri = '/gp/' + args.scene.id + '/off';
-    homewizard.call(args.device.id, uri, function(err, response) {
+    homewizard.call(args.device.id, '/gp/' + args.scene.id + '/off', function(err, response) {
       if (err === null) {
         Homey.log('Scene is off');
         callback( null, true );

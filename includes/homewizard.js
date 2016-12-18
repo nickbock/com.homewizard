@@ -64,7 +64,7 @@ module.exports = (function(){
                }
            });    
       } 
-   }
+   };
    
    homewizard.getScenes = function(args, callback) {
       this.call(args.args.device.id, '/gplist', function(err, response) {
@@ -82,7 +82,7 @@ module.exports = (function(){
           callback(err); // err
         }
       });
-   }
+   };
    
    homewizard.ledring_pulse = function(device_id, colorName) {
       var homewizard_ledring =  self.devices[device_id].settings.homewizard_ledring;
@@ -100,6 +100,6 @@ module.exports = (function(){
             }
         );
       }
-   }   
+   };
    return homewizard;
 })();
