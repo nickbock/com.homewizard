@@ -1,7 +1,5 @@
 var devices = [];
-var scenes = [];
 var homewizard = require('./../../includes/homewizard.js');
-var request = require('request');
 var refreshIntervalId = 0;
 
 // SETTINGS
@@ -18,9 +16,8 @@ module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj,
 };
 
 module.exports.pair = function( socket ) {
-    socket.on('get_homewizards', function (device, callback) {
+    socket.on('get_homewizards', function () {
         homewizard.getDevices(function(homewizard_devices) {
-            
             Homey.log(homewizard_devices);
             var hw_devices = {};
             Object.keys(homewizard_devices).forEach(function(key) {
@@ -39,7 +36,7 @@ module.exports.pair = function( socket ) {
               id: device.data.id,
               name: device.name,
               settings: device.settings,
-            }
+            };
             callback( null, devices );
             socket.emit("success", device);
             startPolling();   
@@ -50,7 +47,7 @@ module.exports.pair = function( socket ) {
     
     socket.on('disconnect', function(){
         console.log("User aborted pairing, or pairing is finished");
-    })
+    });
 }
 
 module.exports.init = function(devices_data, callback) {
@@ -61,9 +58,9 @@ module.exports.init = function(devices_data, callback) {
             devices[device.id].settings = settings;
         });
     });
-  if (Object.keys(devices).length > 0) {
-    startPolling();
-  }
+    if (Object.keys(devices).length > 0) {
+      startPolling();
+    }
 	Homey.log('Wattcher driver init done');
 
 	callback (null, true);
@@ -108,15 +105,14 @@ function startPolling() {
     console.log("--Start Polling Wattcher-- ");
     Object.keys(devices).forEach(function (device_id) {
       getStatus(device_id);
-    })
+    });
   }, 1000 * 10);
 }
 
-function getStatus(device_id, callback) {
+function getStatus(device_id) {
     var homewizard_id = devices[device_id].settings.homewizard_id;
     homewizard.call(homewizard_id, '/get-status', function(err, response) {
         if (err === null) {
-          var output = [];
           try {
                module.exports.setAvailable({id: device_id});
                var energy_current_cons = ( response.energymeters[0].po ); // WATTS Energy used JSON $energymeters[0]['po']
@@ -130,7 +126,6 @@ function getStatus(device_id, callback) {
                 console.log("Wattcher usage- "+ energy_current_cons); 
                 console.log("Wattcher Daytotal- "+ energy_daytotal_cons); 
             } catch (err) {
-               
                // Error with Wattcher no data in Energymeters 
                console.log ("No Wattcher found");
                module.exports.setUnavailable({id: device_id}, "No Wattcher found" );

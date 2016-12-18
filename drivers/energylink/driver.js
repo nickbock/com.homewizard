@@ -1,7 +1,5 @@
 var devices = [];
-var scenes = [];
 var homewizard = require('./../../includes/homewizard.js');
-var request = require('request');
 var refreshIntervalId = 0;
 
 // SETTINGS
@@ -18,7 +16,7 @@ module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj,
 };
 
 module.exports.pair = function( socket ) {
-    socket.on('get_homewizards', function (device, callback) {
+    socket.on('get_homewizards', function () {
         homewizard.getDevices(function(homewizard_devices) {
             
             Homey.log(homewizard_devices);
@@ -39,7 +37,7 @@ module.exports.pair = function( socket ) {
               id: device.data.id,
               name: device.name,
               settings: device.settings,
-            }
+            };
             callback( null, devices );
             socket.emit("success", device);
             startPolling();   
@@ -50,7 +48,7 @@ module.exports.pair = function( socket ) {
     
     socket.on('disconnect', function(){
         console.log("User aborted pairing, or pairing is finished");
-    })
+    });
 }
 
 module.exports.init = function(devices_data, callback) {
@@ -140,15 +138,14 @@ function startPolling() {
     console.log("--Start Polling Energylink-- ");
     Object.keys(devices).forEach(function (device_id) {
       getStatus(device_id);
-    })
+    });
   }, 1000 * 10);
 }
 
-function getStatus(device_id, callback) {
+function getStatus(device_id) {
     var homewizard_id = devices[device_id].settings.homewizard_id;
    homewizard.call(homewizard_id, '/get-status', function(err, response) {
         if (err === null) {
-            var output = [];
             try {
                 module.exports.setAvailable({id: device_id});
                 var energy_current_cons = ( response.energylinks[0].used.po ); // WATTS Energy used JSON $energylink[0]['used']['po']
