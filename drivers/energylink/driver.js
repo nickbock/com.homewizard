@@ -61,7 +61,7 @@ module.exports.init = function(devices_data, callback) {
             devices[device.id].settings = settings;
         });
     });
-  if (devices.length > 0) {
+  if (Object.keys(devices).length > 0) {
     startPolling();
   }
 	Homey.log('Energylink driver init done');
@@ -138,7 +138,7 @@ module.exports.capabilities = {
 function startPolling() {
   refreshIntervalId = setInterval(function () {
     console.log("--Start Polling Energylink-- ");
-    devices.forEach(function (device_id) {
+    Object.keys(devices).forEach(function (device_id) {
       getStatus(device_id);
     })
   }, 1000 * 10);
