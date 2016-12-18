@@ -135,6 +135,8 @@ function getStatus(device_id, callback) {
                console.log ("No Wattcher found");
                module.exports.setUnavailable({id: device_id}, "No Wattcher found" );
            }
+        } else {
+            Homey.log(err);
         }
     });
 }

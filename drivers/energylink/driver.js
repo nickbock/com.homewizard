@@ -192,6 +192,8 @@ function getStatus(device_id, callback) {
                   console.log ("No Energylink found");
                   module.exports.setUnavailable({id: device_id}, "No Energylink found" );
           }
-         } 
+        } else {
+            Homey.log(err);
+        }
     });
 }
