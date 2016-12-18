@@ -170,19 +170,19 @@ function getStatus(device_id, callback) {
                 module.exports.realtime( { id: device_id }, "meter_gas", gas_daytotal_cons );
                 
                 // Trigger flows
-                if (energy_current_cons != device.last_measure_power_used) {
+                if (energy_current_cons != devices[device_id].last_measure_power_used) {
                     console.log("Current Power - "+ energy_current_cons);
                     Homey.manager('flow').triggerDevice('power_used_changed', { power_used: energy_current_cons }, null, { id: device_id } );
                 }
-                if (energy_current_prod != device.last_measure_power_s1) {
+                if (energy_current_prod != devices[device_id].last_measure_power_s1) {
                     console.log("Current S1 - "+ energy_current_prod);
                     Homey.manager('flow').triggerDevice('power_s1_changed', { power_s1: energy_current_prod }, null, { id: device_id } );
                 }
-                if (energy_daytotal_cons != device.last_meter_power_used) {
+                if (energy_daytotal_cons != devices[device_id].last_meter_power_used) {
                     console.log("Used Daytotal- "+ energy_daytotal_cons);                                
                     Homey.manager('flow').triggerDevice('meter_power_used_changed', { power_daytotal_used: energy_daytotal_cons }, null, { id: device_id });
                 }
-                if (energy_daytotal_prod != device.last_meter_power_s1) {                                
+                if (energy_daytotal_prod != devices[device_id].last_meter_power_s1) {                                
                     console.log("S1 Daytotal- "+ energy_daytotal_prod);                                
                     Homey.manager('flow').triggerDevice('meter_power_s1_changed', { power_daytotal_s1: energy_daytotal_prod }, null, { id: device_id });                                                                                    
                 }
