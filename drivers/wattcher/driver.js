@@ -106,46 +106,37 @@ module.exports.capabilities = {
 function startPolling() {
   refreshIntervalId = setInterval(function () {
     console.log("--Start Polling Wattcher-- ");
-    devices.forEach(function (device) {
-      getStatus(device);
+    devices.forEach(function (device_id) {
+      getStatus(device_id);
     })
   }, 1000 * 10);
 }
 
-function getStatus(device, callback) {
-    var homewizard_id = devices[device.id].settings.homewizard_id;
-   homewizard.call(homewizard_id, '/get-status', function(err, response) {
-    if (err === null) {
-      var output = [];
-      try {
-      	   module.exports.setAvailable({id: device.id});
-           var energy_current_cons = ( response.energymeters[0].po ); // WATTS Energy used JSON $energymeters[0]['po']
-           var energy_daytotal_cons = ( response.energymeters[0].dayTotal ); // KWH Energy used JSON $energymeters[0]['dayTotal']
-                            
-           if (typeof devices[device.id].settings === 'undefined') {
-             var logip = 'undefined';
-           } else {
-             var logip = devices[device.id].settings.homewizard_ip;
+function getStatus(device_id, callback) {
+    var homewizard_id = devices[device_id].settings.homewizard_id;
+    homewizard.call(homewizard_id, '/get-status', function(err, response) {
+        if (err === null) {
+          var output = [];
+          try {
+               module.exports.setAvailable({id: device_id});
+               var energy_current_cons = ( response.energymeters[0].po ); // WATTS Energy used JSON $energymeters[0]['po']
+               var energy_daytotal_cons = ( response.energymeters[0].dayTotal ); // KWH Energy used JSON $energymeters[0]['dayTotal']
+         
+                // Wattcher elec current
+                module.exports.realtime( { id: device_id }, "measure_power", energy_current_cons );
+                // Wattcher elec total day
+                module.exports.realtime( { id: device_id }, "meter_power", energy_daytotal_cons );
+                
+                console.log("Wattcher usage- "+ energy_current_cons); 
+                console.log("Wattcher Daytotal- "+ energy_daytotal_cons); 
+            } catch (err) {
+               
+               // Error with Wattcher no data in Energymeters 
+               console.log ("No Wattcher found");
+               module.exports.setUnavailable({id: device_id}, "No Wattcher found" );
            }
-           
-           console.log(device.id + ' - ' + logip);
-     
-     			// Wattcher elec current
-     			module.exports.realtime( { id: device.id }, "measure_power", energy_current_cons );
-     			// Wattcher elec total day
-     			module.exports.realtime( { id: device.id }, "meter_power", energy_daytotal_cons );
-     			
-     			console.log("Wattcher usage- "+ energy_current_cons); 
-     			console.log("Wattcher Daytotal- "+ energy_daytotal_cons); 
-     		}
-     catch (err) {
-		
-     		// Error with Wattcher no data in Energymeters 
-     		console.log ("No Wattcher found");
-        module.exports.setUnavailable({id: device.id}, "No Wattcher found" );
-    }
-    }
-  })
+        }
+    });
 }
 
 
