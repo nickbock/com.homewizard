@@ -110,30 +110,36 @@ function startPolling() {
 }
 
 function getStatus(device_id) {
-    var homewizard_id = devices[device_id].settings.homewizard_id;
-    homewizard.call(homewizard_id, '/get-status', function(err, response) {
-        if (err === null) {
-          try {
-               module.exports.setAvailable({id: device_id});
-               var energy_current_cons = ( response.energymeters[0].po ); // WATTS Energy used JSON $energymeters[0]['po']
-               var energy_daytotal_cons = ( response.energymeters[0].dayTotal ); // KWH Energy used JSON $energymeters[0]['dayTotal']
-         
-                // Wattcher elec current
-                module.exports.realtime( { id: device_id }, "measure_power", energy_current_cons );
-                // Wattcher elec total day
-                module.exports.realtime( { id: device_id }, "meter_power", energy_daytotal_cons );
-                
-                console.log("Wattcher usage- "+ energy_current_cons); 
-                console.log("Wattcher Daytotal- "+ energy_daytotal_cons); 
-            } catch (err) {
-               // Error with Wattcher no data in Energymeters 
-               console.log ("No Wattcher found");
-               module.exports.setUnavailable({id: device_id}, "No Wattcher found" );
-           }
-        } else {
-            Homey.log(err);
-        }
-    });
+    if(devices[device_id].settings.homewizard_id !== undefined ) {
+        var homewizard_id = devices[device_id].settings.homewizard_id;
+        homewizard.call(homewizard_id, '/get-status', function(err, response) {
+            if (err === null) {
+              try {
+                   module.exports.setAvailable({id: device_id});
+                   var energy_current_cons = ( response.energymeters[0].po ); // WATTS Energy used JSON $energymeters[0]['po']
+                   var energy_daytotal_cons = ( response.energymeters[0].dayTotal ); // KWH Energy used JSON $energymeters[0]['dayTotal']
+             
+                    // Wattcher elec current
+                    module.exports.realtime( { id: device_id }, "measure_power", energy_current_cons );
+                    // Wattcher elec total day
+                    module.exports.realtime( { id: device_id }, "meter_power", energy_daytotal_cons );
+                    
+                    console.log("Wattcher usage- "+ energy_current_cons); 
+                    console.log("Wattcher Daytotal- "+ energy_daytotal_cons); 
+                } catch (err) {
+                   // Error with Wattcher no data in Energymeters 
+                   console.log ("No Wattcher found");
+                   module.exports.setUnavailable({id: device_id}, "No Wattcher found" );
+               }
+            } else {
+                Homey.log(err);
+            }
+        });
+    } else {
+        Homey.log('Removed Heatlink '+ device_id +' (old settings)');
+        module.exports.setUnavailable({id: device_id}, "No Heatlink found" );
+        clearInterval(refreshIntervalId);
+    }
 }
 
 
