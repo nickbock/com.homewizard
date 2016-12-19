@@ -1,5 +1,4 @@
 var devices = [];
-var scenes = [];
 var homewizard = require('./../../includes/homewizard.js');
 var request = require('request');
 
@@ -10,6 +9,7 @@ module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj,
 	    changedKeysArr.forEach(function (key) {
 		    devices[device_data.id].settings[key] = newSettingsObj[key];
 		});
+        homewizard.setDevices(devices);
 		callback(null, true);
     } catch (error) {
       callback(error); 
@@ -35,7 +35,8 @@ module.exports.pair = function( socket ) {
                   name: device.name,
                   settings: device.settings,
                   capabilities: device.capabilities
-                }
+                };
+                homewizard.setDevices(devices);
                 callback( null, devices );
                 socket.emit("success", device);
 			} else {
@@ -51,17 +52,23 @@ module.exports.pair = function( socket ) {
     
     socket.on('disconnect', function(){
         console.log("User aborted pairing, or pairing is finished");
-    })
+    });
 }
 
 module.exports.init = function(devices_data, callback) {
-	devices_data.forEach(function initdevice(device) {
-	    Homey.log('add device: ' + JSON.stringify(device));
-	    devices[device.id] = device;
-	    module.exports.getSettings(device, function(err, settings){
-		    devices[device.id].settings = settings;
-		});
-	});
+    if (homewizard.debug) {
+        devices_data = homewizard.debug_devices_data;
+    }
+    
+    devices_data.forEach(function initdevice(device) {
+        Homey.log('add device: ' + JSON.stringify(device));
+        devices[device.id] = device;
+        module.exports.getSettings(device, function(err, settings){
+            devices[device.id].settings = settings;
+        });
+    });
+    homewizard.setDevices(devices);
+    
 	Homey.log('HomeWizard driver init done');
 	callback (null, true);
 };
@@ -79,8 +86,7 @@ Homey.manager('flow').on('action.switch_scene_on.scene.autocomplete', function( 
 });
 
 Homey.manager('flow').on('action.switch_scene_on', function( callback, args ){
-    var uri = '/gp/' + args.scene.id + '/on';
-    homewizard.call(devices, args.device.id, uri, function(err, response) {
+    homewizard.call(devices, args.device.id, '/gp/' + args.scene.id + '/on', function(err, response) {
       if (err === null) {
         Homey.log('Scene is on');
         callback( null, true );
@@ -97,8 +103,7 @@ Homey.manager('flow').on('action.switch_scene_off.scene.autocomplete', function(
 });
 
 Homey.manager('flow').on('action.switch_scene_off', function( callback, args ){
-    var uri = '/gp/' + args.scene.id + '/off';
-    homewizard.call(devices, args.device.id, uri, function(err, response) {
+    homewizard.call(args.device.id, '/gp/' + args.scene.id + '/off', function(err, response) {
       if (err === null) {
         Homey.log('Scene is off');
         callback( null, true );
@@ -111,7 +116,7 @@ Homey.manager('flow').on('action.switch_scene_off', function( callback, args ){
 
 // PRESETS
 Homey.manager('flow').on('condition.check_preset', function( callback, args ){
-    homewizard.call(devices, args.device.id, '/get-status/', function(err, response) {
+    homewizard.call(args.device.id, '/get-status/', function(err, response) {
       if (err === null) {
         if (response.preset == args.preset) {
             Homey.log('Yes, preset is: '+ response.preset+'!');
@@ -133,12 +138,12 @@ Homey.manager('flow').on('condition.check_preset', function( callback, args ){
 	
 Homey.manager('flow').on('action.set_preset', function( callback, args ){
     var uri = '/preset/' + args.preset;
-    homewizard.call(devices, args.device.id, uri, function(err, response) {
+    homewizard.call(args.device.id, uri, function(err, response) {
       if (err === null) {
-        homewizard.ledring_pulse(devices, args.device.id, 'green');
+        homewizard.ledring_pulse(args.device.id, 'green');
         callback(null, true);
       } else {
-        homewizard.ledring_pulse(devices, args.device.id, 'red');
+        homewizard.ledring_pulse(args.device.id, 'red');
         callback(err, false); // err
       }
     });
