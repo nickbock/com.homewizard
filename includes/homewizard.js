@@ -131,7 +131,9 @@ module.exports = (function(){
    
    homewizard.poll = function() {
       Object.keys(self.devices).forEach(function (device_id) {
-         self.devices[device_id].polldata = [];
+         if (typeof self.devices[device_id].polldata === 'undefined') {
+            self.devices[device_id].polldata = [];  
+         }
          homewizard.call(device_id, '/get-status', function(err, response) {
             if (err === null) {
                self.devices[device_id].polldata.preset = response.preset;
