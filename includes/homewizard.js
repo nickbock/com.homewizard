@@ -123,26 +123,26 @@ module.exports = (function(){
       }
    };
    
-   homewizard.startpoll = function(device_id) {
-      Object.keys(self.devices).forEach(function (device_id) {
+   homewizard.startpoll = function() {
          self.polls.device_id = setInterval(function () {
-            homewizard.poll(device_id);
+            homewizard.poll();
          }, 1000 * 10);
-      });
    };
    
-   homewizard.poll = function(device_id) {
-      self.devices[device_id].polldata = [];
-      homewizard.call(device_id, '/get-status', function(err, response) {
-         if (err === null) {
-            self.devices[device_id].polldata.preset = response.preset;
-            self.devices[device_id].polldata.heatlinks = response.heatlinks;
-            self.devices[device_id].polldata.energylinks = response.energylinks;
-            self.devices[device_id].polldata.energymeters = response.energymeters;
-            //self.devices[device_id].polldata.thermometers = response.thermometers;
-            
-            Homey.log('Data polled for: '+device_id);
-         }
+   homewizard.poll = function() {
+      Object.keys(self.devices).forEach(function (device_id) {
+         self.devices[device_id].polldata = [];
+         homewizard.call(device_id, '/get-status', function(err, response) {
+            if (err === null) {
+               self.devices[device_id].polldata.preset = response.preset;
+               self.devices[device_id].polldata.heatlinks = response.heatlinks;
+               self.devices[device_id].polldata.energylinks = response.energylinks;
+               self.devices[device_id].polldata.energymeters = response.energymeters;
+               //self.devices[device_id].polldata.thermometers = response.thermometers;
+               
+               Homey.log('Data polled for: '+device_id);
+            }
+         });
       });
    };
    
