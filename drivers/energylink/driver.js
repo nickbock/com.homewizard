@@ -146,10 +146,6 @@ function getStatus(device_id) {
     if(devices[device_id].settings.homewizard_id !== undefined ) {
         var homewizard_id = devices[device_id].settings.homewizard_id;
         homewizard.getDeviceData(homewizard_id, 'energylinks', function(callback) {
-            Homey.log('===== EL DATA =====');
-            Homey.log(callback);
-            Homey.log('===== END EL DATA =====');
-            
             if (Object.keys(callback).length > 0) {
                 try {
                     module.exports.setAvailable({id: device_id});

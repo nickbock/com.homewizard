@@ -113,10 +113,6 @@ function getStatus(device_id) {
     if(devices[device_id].settings.homewizard_id !== undefined ) {
         var homewizard_id = devices[device_id].settings.homewizard_id;
         homewizard.getDeviceData(homewizard_id, 'energymeters', function(callback) {
-            Homey.log('===== EM DATA =====');
-            Homey.log(callback);
-            Homey.log('===== END EM DATA =====');
-            
             try {
                 module.exports.setAvailable({id: device_id});
                 var energy_current_cons = ( callback[0].po ); // WATTS Energy used JSON $energymeters[0]['po']
