@@ -132,6 +132,10 @@ function getStatus(device_id) {
     if(devices[device_id].settings.homewizard_id !== undefined ) {
         var homewizard_id = devices[device_id].settings.homewizard_id;
         homewizard.getDeviceData(homewizard_id, 'heatlinks', function(callback) {
+            Homey.log('===== HL DATA =====');
+            Homey.log(callback);
+            Homey.log('===== END HL DATA =====');
+            
             if (Object.keys(callback).length > 0) {
            
                 var rte = (callback[0].rte.toFixed(1) * 2) / 2;
