@@ -66,10 +66,10 @@ module.exports.init = function(devices_data, callback) {
         module.exports.getSettings(device, function(err, settings){
             devices[device.id].settings = settings;
         });
-        
-        homewizard.startpoll(device.id);
     });
     homewizard.setDevices(devices);
+    
+    homewizard.startpoll();
     
 	Homey.log('HomeWizard driver init done');
 	callback (null, true);

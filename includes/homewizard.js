@@ -124,9 +124,11 @@ module.exports = (function(){
    };
    
    homewizard.startpoll = function(device_id) {
-      self.polls.device_id = setInterval(function () {
-         homewizard.poll(device_id);
-      }, 1000 * 10);
+      Object.keys(self.devices).forEach(function (device_id) {
+         self.polls.device_id = setInterval(function () {
+            homewizard.poll(device_id);
+         }, 1000 * 10);
+      });
    };
    
    homewizard.poll = function(device_id) {
