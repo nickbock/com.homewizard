@@ -47,8 +47,8 @@ module.exports = (function(){
          callback(null, testdata); 
       } else {
          Homey.log('Call device' + device_id);
-         Homey.log(self.devices[device_id]);
-         if (typeof self.devices[device_id].settings !== 'undefined' && typeof self.devices[device_id].settings.homewizard_ip !== 'undefined' && typeof self.devices[device_id].settings.homewizard_pass === 'undefined') {
+         //Homey.log(self.devices[device_id]);
+         if (typeof self.devices[device_id].settings !== 'undefined' && typeof self.devices[device_id].settings.homewizard_ip !== 'undefined' && typeof self.devices[device_id].settings.homewizard_pass !== 'undefined') {
             var homewizard_ip = self.devices[device_id].settings.homewizard_ip;
             var homewizard_pass = self.devices[device_id].settings.homewizard_pass;
             request({
