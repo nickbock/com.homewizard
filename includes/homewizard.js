@@ -46,6 +46,7 @@ module.exports = (function(){
       if (homewizard.debug) {
          callback(null, testdata); 
       } else {
+         Homey.log('Call device' + device_id);
          Homey.log(self.devices[device_id]);
          if (typeof self.devices[device_id].settings !== 'undefined' && typeof self.devices[device_id].settings.homewizard_ip !== 'undefined' && typeof self.devices[device_id].settings.homewizard_pass === 'undefined') {
             var homewizard_ip = self.devices[device_id].settings.homewizard_ip;
@@ -82,8 +83,7 @@ module.exports = (function(){
                }
            });
          } else {
-            Homey.log('Removed Homewizard '+ device_id +' (settings not found)');
-            module.exports.setUnavailable({id: device_id}, "No HW settings found" );
+            Homey.log('Homewizard '+ device_id +': settings not found!');
         }
       } 
    };
