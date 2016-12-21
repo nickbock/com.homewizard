@@ -181,7 +181,7 @@ function getStatus(device_id) {
  
  function startPolling() {
     refreshIntervalId = setInterval(function () {
-      Homey.log("--Start Polling-- ");
+      Homey.log("--Start Heatlink Polling-- ");
       Object.keys(devices).forEach(function (device_id) {
         getStatus(device_id);
       });

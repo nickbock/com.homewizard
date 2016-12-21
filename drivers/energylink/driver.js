@@ -135,7 +135,7 @@ module.exports.capabilities = {
 // Start polling
 function startPolling() {
   refreshIntervalId = setInterval(function () {
-    console.log("--Start Polling Energylink-- ");
+    console.log("--Start Energylink Polling-- ");
     Object.keys(devices).forEach(function (device_id) {
       getStatus(device_id);
     });

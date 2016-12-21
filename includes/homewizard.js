@@ -142,7 +142,7 @@ module.exports = (function(){
                self.devices[device_id].polldata.energymeters = response.energymeters;
                //self.devices[device_id].polldata.thermometers = response.thermometers;
                
-               Homey.log('Data polled for: '+device_id);
+               Homey.log('HW-Data polled for: '+device_id);
             }
          });
       });
