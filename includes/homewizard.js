@@ -44,6 +44,7 @@ module.exports = (function(){
       if (homewizard.debug) {
          callback(null, testdata); 
       } else {
+         Homey.log(self.devices[device_id]);
          if (typeof self.devices[device_id].settings !== 'undefined' && typeof self.devices[device_id].settings.homewizard_ip !== 'undefined' && typeof self.devices[device_id].settings.homewizard_pass === 'undefined') {
             var homewizard_ip = self.devices[device_id].settings.homewizard_ip;
             var homewizard_pass = self.devices[device_id].settings.homewizard_pass;
@@ -128,9 +129,8 @@ module.exports = (function(){
    };
    
    homewizard.poll = function(device_id) {
-      var homewizard_id = self.devices[device_id].settings.homewizard_id;
       self.devices[device_id].polldata = [];
-      homewizard.call(homewizard_id, '/get-status', function(err, response) {
+      homewizard.call(device_id, '/get-status', function(err, response) {
          if (err === null) {
             self.devices[device_id].polldata.preset = response.preset;
             self.devices[device_id].polldata.heatlinks = response.heatlinks;
