@@ -141,7 +141,7 @@ module.exports = (function(){
             Homey.log('Data polled for: '+device_id);
          }
       });
-   }
+   };
    
    return homewizard;
 })();
