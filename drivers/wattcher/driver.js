@@ -134,8 +134,8 @@ function getStatus(device_id) {
             }
         });
     } else {
-        Homey.log('Removed Heatlink '+ device_id +' (old settings)');
-        module.exports.setUnavailable({id: device_id}, "No Heatlink found" );
+        Homey.log('Removed Wattcher '+ device_id +' (old settings)');
+        module.exports.setUnavailable({id: device_id}, "No Wattcher found" );
         clearInterval(refreshIntervalId);
     }
 }

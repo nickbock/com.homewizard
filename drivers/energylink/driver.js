@@ -149,11 +149,11 @@ function getStatus(device_id) {
             if (Object.keys(callback).length > 0) {
                 try {
                     module.exports.setAvailable({id: device_id});
-                    var energy_current_cons = ( callback.energylinks[0].used.po ); // WATTS Energy used JSON $energylink[0]['used']['po']
-                    var energy_current_prod = ( callback.energylinks[0].s1.po ); // WATTS Energy produced via S1 $energylink[0]['s1']['po']
-                    var energy_daytotal_cons = ( callback.energylinks[0].used.dayTotal ); // KWH Energy used JSON $energylink[0]['used']['po']
-                    var energy_daytotal_prod = ( callback.energylinks[0].s1.dayTotal ); // KWH Energy produced via S1 $energylink[0]['s1']['po']
-                    var gas_daytotal_cons = ( callback.energylinks[0].gas.dayTotal ); // m3 Energy produced via S1 $energylink[0]['gas']['dayTotal']
+                    var energy_current_cons = ( callback[0].used.po ); // WATTS Energy used JSON $energylink[0]['used']['po']
+                    var energy_current_prod = ( callback[0].s1.po ); // WATTS Energy produced via S1 $energylink[0]['s1']['po']
+                    var energy_daytotal_cons = ( callback[0].used.dayTotal ); // KWH Energy used JSON $energylink[0]['used']['po']
+                    var energy_daytotal_prod = ( callback[0].s1.dayTotal ); // KWH Energy produced via S1 $energylink[0]['s1']['po']
+                    var gas_daytotal_cons = ( callback[0].gas.dayTotal ); // m3 Energy produced via S1 $energylink[0]['gas']['dayTotal']
                      
                           
                     // Consumed elec current
