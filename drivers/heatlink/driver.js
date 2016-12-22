@@ -134,9 +134,9 @@ function getStatus(device_id) {
         homewizard.getDeviceData(homewizard_id, 'heatlinks', function(callback) {
             if (Object.keys(callback).length > 0) {
            	try {
-                var rte = (callback[0].rte.toFixed(1) * 2) / 2;
-                var rsp = (callback[0].rsp.toFixed(1) * 2) / 2;
-                var tte = (callback[0].tte.toFixed(1) * 2) / 2;
+                var rte = callback[0].rte;
+                var rsp = callback[0].rsp;
+                var tte = callback[0].tte;
     
                 //Check current temperature
                 if (devices[device_id].temperature != rte) {
