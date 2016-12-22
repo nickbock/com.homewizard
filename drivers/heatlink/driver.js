@@ -1,6 +1,6 @@
 var devices = [];
 var homewizard = require('./../../includes/homewizard.js');
-var rte = rsp = tte = refreshIntervalId = 0;
+var refreshIntervalId = 0;
 
 
 // SETTINGS
@@ -136,9 +136,9 @@ function getStatus(device_id) {
             if (Object.keys(callback).length > 0) {
            	try {
                 if (!isNaN(parseFloat(callback[0].rte)) && isFinite(callback[0].rte) && !isNaN(parseFloat(callback[0].rsp)) && isFinite(callback[0].rsp) && !isNaN(parseFloat(callback[0].tte)) && isFinite(callback[0].tte)) {
-                    rte = callback[0].rte.toFixed(1);    
-                    rsp = callback[0].rsp.toFixed(1);    
-                    tte = callback[0].tte.toFixed(1);    
+                    var rte = callback[0].rte.toFixed(1);    
+                    var rsp = callback[0].rsp.toFixed(1);    
+                    var tte = callback[0].tte.toFixed(1);    
                 }
     
                 //Check current temperature
