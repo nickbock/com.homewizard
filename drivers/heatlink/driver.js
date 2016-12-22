@@ -170,8 +170,7 @@ function getStatus(device_id) {
 			} else {
 			  console.log("TTE: no change");
 			}
-		}	
-                catch(err) {
+		} catch(err) {
                       // Error with Energylink no data in Energylink
                       console.log ("No Energylink found");
                       module.exports.setUnavailable({id: device_id}, "No Energylink found" );
