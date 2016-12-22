@@ -1,6 +1,7 @@
 var devices = [];
 var homewizard = require('./../../includes/homewizard.js');
-var refreshIntervalId = 0;
+var rte = rsp = tte = refreshIntervalId = 0;
+
 
 // SETTINGS
 module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj, changedKeysArr, callback ) {
@@ -134,9 +135,11 @@ function getStatus(device_id) {
         homewizard.getDeviceData(homewizard_id, 'heatlinks', function(callback) {
             if (Object.keys(callback).length > 0) {
            	try {
-                var rte = callback[0].rte;
-                var rsp = callback[0].rsp;
-                var tte = callback[0].tte;
+                if (!isNaN(parseFloat(callback[0].rte)) && isFinite(callback[0].rte) && !isNaN(parseFloat(callback[0].rsp)) && isFinite(callback[0].rsp) && !isNaN(parseFloat(callback[0].tte)) && isFinite(callback[0].tte)) {
+                    rte = callback[0].rte.toFixed(1);    
+                    rsp = callback[0].rsp.toFixed(1);    
+                    tte = callback[0].tte.toFixed(1);    
+                }
     
                 //Check current temperature
                 if (devices[device_id].temperature != rte) {
