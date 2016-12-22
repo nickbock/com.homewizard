@@ -397,7 +397,7 @@
 			"meter_power": {
 				"title": {
 					"en": "Day usage",
-					"nl": "Dag gebruik"
+					"nl": "Dag totaal"
 				}
 			},
 
