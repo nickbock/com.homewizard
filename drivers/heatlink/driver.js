@@ -2,7 +2,6 @@ var devices = [];
 var homewizard = require('./../../includes/homewizard.js');
 var refreshIntervalId = 0;
 
-
 // SETTINGS
 module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj, changedKeysArr, callback ) {
     Homey.log ('Changed settings: ' + JSON.stringify(device_data) + ' / ' + JSON.stringify(newSettingsObj) + ' / old = ' + JSON.stringify(oldSettingsObj));
@@ -135,43 +134,41 @@ function getStatus(device_id) {
         homewizard.getDeviceData(homewizard_id, 'heatlinks', function(callback) {
             if (Object.keys(callback).length > 0) {
            	try {
-                if (!isNaN(parseFloat(callback[0].rte)) && isFinite(callback[0].rte) && !isNaN(parseFloat(callback[0].rsp)) && isFinite(callback[0].rsp) && !isNaN(parseFloat(callback[0].tte)) && isFinite(callback[0].tte)) {
-                    var rte = callback[0].rte.toFixed(1);    
-                    var rsp = callback[0].rsp.toFixed(1);    
-                    var tte = callback[0].tte.toFixed(1);
-                
-                    //Check current temperature
-                    if (devices[device_id].temperature != rte) {
-                      console.log("New RTE - "+ rte);
-                      module.exports.realtime( { id: device_id }, "measure_temperature", rte );
-                      devices[device_id].temperature = rte;    
-                    } else {
-                      console.log("RTE: no change");
-                    }
-        
-                    //Check thermostat temperature
-                    if (devices[device_id].thermTemperature != rsp) {
-                      console.log("New RSP - "+ rsp);
-                      if (devices[device_id].setTemperature === 0) {
-                        module.exports.realtime( { id: device_id }, "target_temperature", rsp );
-                      }
-                      devices[device_id].thermTemperature = rsp;    
-                    } else {
-                      console.log("RSP: no change");
-                    }
-        
-                    //Check heatlink set temperature
-                    if (devices[device_id].setTemperature != tte) {
-                      console.log("New TTE - "+ tte);
-                      if (tte > 0) {
-                        module.exports.realtime( { id: device_id }, "target_temperature", tte );
-                      } else {
-                        module.exports.realtime( { id: device_id }, "target_temperature", devices[device_id].thermTemperature );
-                      }
-                      devices[device_id].setTemperature = tte;    
-                    } else {
-                      console.log("TTE: no change");
-                    }
+                var rte = (callback[0].rte.toFixed(1) * 2) / 2;
+                var rsp = (callback[0].rsp.toFixed(1) * 2) / 2;
+                var tte = (callback[0].tte.toFixed(1) * 2) / 2;
+    
+                //Check current temperature
+                if (devices[device_id].temperature != rte) {
+                  console.log("New RTE - "+ rte);
+                  module.exports.realtime( { id: device_id }, "measure_temperature", rte );
+                  devices[device_id].temperature = rte;    
+                } else {
+                  console.log("RTE: no change");
+                }
+    
+                //Check thermostat temperature
+                if (devices[device_id].thermTemperature != rsp) {
+                  console.log("New RSP - "+ rsp);
+                  if (devices[device_id].setTemperature === 0) {
+                    module.exports.realtime( { id: device_id }, "target_temperature", rsp );
+                  }
+                  devices[device_id].thermTemperature = rsp;    
+                } else {
+                  console.log("RSP: no change");
+                }
+    
+                //Check heatlink set temperature
+                if (devices[device_id].setTemperature != tte) {
+                  console.log("New TTE - "+ tte);
+                  if (tte > 0) {
+                    module.exports.realtime( { id: device_id }, "target_temperature", tte );
+                  } else {
+                    module.exports.realtime( { id: device_id }, "target_temperature", devices[device_id].thermTemperature );
+                  }
+                  devices[device_id].setTemperature = tte;    
+                } else {
+                  console.log("TTE: no change");
                 }
             } catch(err) {
                       console.log ("Heatlink data corrupt");
