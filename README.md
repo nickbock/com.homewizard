@@ -2,11 +2,16 @@
         
 This app let's you connect your HomeWizard to Homey. You can add your HomeWizard in the device section. Once done it will show up in the flow-editor, ready to be used!
 
+V0.1.0:
+
+* Improved polling (far less requests to HomeWizard)
+* Various bugfixes and improvements
 
 V0.0.9:
 
 * Energylink + Wattcher support added (credits: Jeroen Tebbens)
 * SIDENOTE: All devices paired before 0.0.9 (expect HomeWizard) should be re-paired!
+* Make sure your solar meter is connected to s1 on energylink.
 
 V0.0.8:
 

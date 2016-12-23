@@ -135,7 +135,7 @@ module.exports.capabilities = {
 // Start polling
 function startPolling() {
   refreshIntervalId = setInterval(function () {
-    console.log("--Start Polling Energylink-- ");
+    console.log("--Start Energylink Polling-- ");
     Object.keys(devices).forEach(function (device_id) {
       getStatus(device_id);
     });
@@ -145,15 +145,15 @@ function startPolling() {
 function getStatus(device_id) {
     if(devices[device_id].settings.homewizard_id !== undefined ) {
         var homewizard_id = devices[device_id].settings.homewizard_id;
-        homewizard.call(homewizard_id, '/get-status', function(err, response) {
-            if (err === null) {
+        homewizard.getDeviceData(homewizard_id, 'energylinks', function(callback) {
+            if (Object.keys(callback).length > 0) {
                 try {
                     module.exports.setAvailable({id: device_id});
-                    var energy_current_cons = ( response.energylinks[0].used.po ); // WATTS Energy used JSON $energylink[0]['used']['po']
-                    var energy_current_prod = ( response.energylinks[0].s1.po ); // WATTS Energy produced via S1 $energylink[0]['s1']['po']
-                    var energy_daytotal_cons = ( response.energylinks[0].used.dayTotal ); // KWH Energy used JSON $energylink[0]['used']['po']
-                    var energy_daytotal_prod = ( response.energylinks[0].s1.dayTotal ); // KWH Energy produced via S1 $energylink[0]['s1']['po']
-                    var gas_daytotal_cons = ( response.energylinks[0].gas.dayTotal ); // m3 Energy produced via S1 $energylink[0]['gas']['dayTotal']
+                    var energy_current_cons = ( callback[0].used.po ); // WATTS Energy used JSON $energylink[0]['used']['po']
+                    var energy_current_prod = ( callback[0].s1.po ); // WATTS Energy produced via S1 $energylink[0]['s1']['po']
+                    var energy_daytotal_cons = ( callback[0].used.dayTotal ); // KWH Energy used JSON $energylink[0]['used']['po']
+                    var energy_daytotal_prod = ( callback[0].s1.dayTotal ); // KWH Energy produced via S1 $energylink[0]['s1']['po']
+                    var gas_daytotal_cons = ( callback[0].gas.dayTotal ); // m3 Energy produced via S1 $energylink[0]['gas']['dayTotal']
                      
                           
                     // Consumed elec current
@@ -184,14 +184,12 @@ function getStatus(device_id) {
                         console.log("S1 Daytotal- "+ energy_daytotal_prod);                                
                         Homey.manager('flow').triggerDevice('meter_power_s1_changed', { power_daytotal_s1: energy_daytotal_prod }, null, { id: device_id });                                                                                    
                     }
-               }
-               catch(err) {
+                }
+                catch(err) {
                       // Error with Energylink no data in Energylink
                       console.log ("No Energylink found");
                       module.exports.setUnavailable({id: device_id}, "No Energylink found" );
-              }
-            } else {
-                Homey.log(err);
+                }
             }
         });
     } else {
