@@ -325,7 +325,7 @@
 		},
 		"class": "sensor",
 		"capabilities": [
-			"meter_power.used", "meter_power.s1", "meter_gas", "measure_power.used", "measure_power.s1"
+			"meter_power.used", "meter_power.s1", "meter_gas", "measure_power.used", "measure_power.s1", "meter_water"
 		],
 
 		"capabilitiesOptions": {
@@ -360,6 +360,12 @@
 				"title": {
 					"en": "Gas",
 					"nl": "Gas"
+				}
+			},
+			"meter_water": {
+				"title": {
+					"en": "Water",
+					"nl": "Water"
 				}
 			}
 		},

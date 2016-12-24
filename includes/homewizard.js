@@ -134,7 +134,7 @@ module.exports = (function(){
          if (typeof self.devices[device_id].polldata === 'undefined') {
             self.devices[device_id].polldata = [];  
          }
-         homewizard.call(device_id, '/get-status', function(err, response) {
+         homewizard.call(device_id, '/get-sensors', function(err, response) {
             if (err === null) {
                self.devices[device_id].polldata.preset = response.preset;
                self.devices[device_id].polldata.heatlinks = response.heatlinks;

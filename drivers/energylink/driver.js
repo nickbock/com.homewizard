@@ -129,7 +129,18 @@ module.exports.capabilities = {
                 callback(null, device.last_meter_gas);
             }
         }
-    }
+    },
+    meter_water: {
+        get: function (device_data, callback) {
+            var device = devices[device_data.id];
+
+            if (device === undefined) {
+                callback(null, 0);
+            } else {
+                callback(null, device.last_meter_water);
+            }
+        }
+    }    
 };
 
 // Start polling
@@ -149,23 +160,60 @@ function getStatus(device_id) {
             if (Object.keys(callback).length > 0) {
                 try {
                     module.exports.setAvailable({id: device_id});
+                    
+                    var value_s1 = ( callback[0].t1 ) ; // Read t1 from energylink (solar/water/null)
+                    var value_s2 = ( callback[0].t2 ) ; // Read t2 from energylink (solar/water/null)
+                    
+                    console.log("t1- " + value_s1);
+                    console.log("t2- " + value_s2);
+                    
+                    // Common Energylink data                 
                     var energy_current_cons = ( callback[0].used.po ); // WATTS Energy used JSON $energylink[0]['used']['po']
-                    var energy_current_prod = ( callback[0].s1.po ); // WATTS Energy produced via S1 $energylink[0]['s1']['po']
                     var energy_daytotal_cons = ( callback[0].used.dayTotal ); // KWH Energy used JSON $energylink[0]['used']['po']
-                    var energy_daytotal_prod = ( callback[0].s1.dayTotal ); // KWH Energy produced via S1 $energylink[0]['s1']['po']
                     var gas_daytotal_cons = ( callback[0].gas.dayTotal ); // m3 Energy produced via S1 $energylink[0]['gas']['dayTotal']
-                     
-                          
+                    
                     // Consumed elec current
                     module.exports.realtime( { id: device_id }, "measure_power.used", energy_current_cons );
                     // Consumed elec total day
                     module.exports.realtime( { id: device_id }, "meter_power.used", energy_daytotal_cons );
-                    // Produced elec current
-                    module.exports.realtime( { id: device_id }, "measure_power.s1", energy_current_prod );
-                    // Produced elec total day
-                    module.exports.realtime( { id: device_id }, "meter_power.s1", energy_daytotal_prod );
                     // Consumed gas      
                     module.exports.realtime( { id: device_id }, "meter_gas", gas_daytotal_cons );
+                    
+                    if (value_s1 == 'solar' ) {
+                    	  var energy_current_prod = ( callback[0].s1.po ); // WATTS Energy produced via S1 $energylink[0]['s1']['po']
+                        var energy_daytotal_prod = ( callback[0].s1.dayTotal ); // KWH Energy produced via S1 $energylink[0]['s1']['po']
+                        
+                        // Produced elec current
+                        module.exports.realtime( { id: device_id }, "measure_power.s1", energy_current_prod );
+                        // Produced elec total day
+                        module.exports.realtime( { id: device_id }, "meter_power.s1", energy_daytotal_prod );
+                    }
+                    
+                    if (value_s2 == 'solar' ) {
+                    	  var energy_current_prod = ( callback[0].s2.po ); // WATTS Energy produced via S1 $energylink[0]['s2']['po']
+                        var energy_daytotal_prod = ( callback[0].s2.dayTotal ); // KWH Energy produced via S1 $energylink[0]['s2']['dayTotal']
+                        
+                        // Produced elec current
+                        module.exports.realtime( { id: device_id }, "measure_power.s2", energy_current_prod );
+                        // Produced elec total day
+                        module.exports.realtime( { id: device_id }, "meter_power.s2", energy_daytotal_prod );
+                    }
+                    
+                    if (value_s1 == 'water' ) {
+                    	  // var water_current_cons = ( callback[0].s1.po ); // Water used via S1 $energylink[0]['s1']['po']
+                        var water_daytotal_cons = ( callback[0].s1.dayTotal ); // Water used via S1 $energylink[0]['s1']['dayTotal']
+                        console.log("Water- " + water_daytotal_cons);
+                        // Used water m3
+                        module.exports.realtime( { id: device_id }, "meter_water", water_daytotal_cons );
+                    }
+                                        
+                    if (value_s2 == 'water' ) {
+                    	  // var water_current_cons = ( callback[0].s2.po ); // Water used via S1 $energylink[0]['s1']['po']
+                        var water_daytotal_cons = ( callback[0].s2.dayTotal ); // Water used via S1 $energylink[0]['s2']['dayTotal']
+                        console.log("Water- " + water_daytotal_cons);
+                        // Used water m3
+                        module.exports.realtime( { id: device_id }, "meter_water", water_daytotal_cons );
+                    }   
                     
                     // Trigger flows
                     if (energy_current_cons != devices[device_id].last_measure_power_used) {
