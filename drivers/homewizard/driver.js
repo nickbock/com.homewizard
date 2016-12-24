@@ -69,6 +69,8 @@ module.exports.init = function(devices_data, callback) {
     });
     homewizard.setDevices(devices);
     
+    homewizard.startpoll();
+    
 	Homey.log('HomeWizard driver init done');
 	callback (null, true);
 };
@@ -86,7 +88,7 @@ Homey.manager('flow').on('action.switch_scene_on.scene.autocomplete', function( 
 });
 
 Homey.manager('flow').on('action.switch_scene_on', function( callback, args ){
-    homewizard.call(devices, args.device.id, '/gp/' + args.scene.id + '/on', function(err, response) {
+    homewizard.call(args.device.id, '/gp/' + args.scene.id + '/on', function(err, response) {
       if (err === null) {
         Homey.log('Scene is on');
         callback( null, true );
