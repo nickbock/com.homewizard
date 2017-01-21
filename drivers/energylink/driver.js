@@ -201,7 +201,7 @@ function getStatus(device_id) {
                     
                     if (value_s1 == 'water' ) {
                     	  // var water_current_cons = ( callback[0].s1.po ); // Water used via S1 $energylink[0]['s1']['po']
-                        var water_daytotal_cons = ( callback[0].s1.dayTotal ); // Water used via S1 $energylink[0]['s1']['dayTotal']
+                        var water_daytotal_cons = ( callback[0].s1.dayTotal / 1000 ); // Water used via S1 $energylink[0]['s1']['dayTotal']
                         console.log("Water- " + water_daytotal_cons);
                         // Used water m3
                         module.exports.realtime( { id: device_id }, "meter_water", water_daytotal_cons );
@@ -209,7 +209,7 @@ function getStatus(device_id) {
                                         
                     if (value_s2 == 'water' ) {
                     	  // var water_current_cons = ( callback[0].s2.po ); // Water used via S1 $energylink[0]['s1']['po']
-                        var water_daytotal_cons = ( callback[0].s2.dayTotal ); // Water used via S1 $energylink[0]['s2']['dayTotal']
+                        var water_daytotal_cons = ( callback[0].s2.dayTotal / 1000 ); // Water used via S1 $energylink[0]['s2']['dayTotal']
                         console.log("Water- " + water_daytotal_cons);
                         // Used water m3
                         module.exports.realtime( { id: device_id }, "meter_water", water_daytotal_cons );
