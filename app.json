@@ -31,6 +31,24 @@
 	},
 	"flow": {
 		"triggers": [{
+				"id": "preset_changed",
+				"title": {
+					"en": "Preset changed",
+					"nl": "Preset veranderd"
+				},
+				"args": [{
+					"name": "Homewizard",
+					"type": "device",
+					"filter": "driver_id=homewizard"
+				}],
+				"tokens": [{
+					"name": "preset",
+					"title": {
+						"en": "Preset",
+						"nl": "Preset"
+					}
+				}]
+			},{
 				"id": "power_used_changed",
 				"title": {
 					"en": "Power used changed",
