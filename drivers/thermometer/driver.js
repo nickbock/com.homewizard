@@ -94,32 +94,36 @@ module.exports.capabilities = {
 function getStatus(device_id) {
     if(devices[device_id].settings.homewizard_id !== undefined ) {
         var homewizard_id = devices[device_id].settings.homewizard_id;
+        var thermometer_id = devices[device_id].settings.thermometer_id;
         homewizard.getDeviceData(homewizard_id, 'thermometers', function(callback) {
             
             if (Object.keys(callback).length > 0) {
-           	try {
-                var te = (callback[0].te.toFixed(1) * 2) / 2;
-                var hu = (callback[0].hu.toFixed(1) * 2) / 2;
-    
-                //Check current temperature
-                if (devices[device_id].temperature != te) {
-                  console.log("New TE - "+ te);
-                  module.exports.realtime( { id: device_id }, "measure_temperature", te );
-                  devices[device_id].temperature = te;    
-                } else {
-                  console.log("TE: no change");
-                }
-                
-                //Check current humidity
-                if (devices[device_id].humidity != hu) {
-                  console.log("New HU - "+ hu);
-                  module.exports.realtime( { id: device_id }, "measure_humidity", hu );
-                  devices[device_id].humidity = hu;    
-                } else {
-                  console.log("HU: no change");
-                }
-
-            } catch(err) {
+                try {
+                    for (var index in callback){
+                        if (callback[index].id == thermometer_id) {
+                            var te = (callback[index].te.toFixed(1) * 2) / 2;
+                            var hu = (callback[index].hu.toFixed(1) * 2) / 2;
+                            
+                            //Check current temperature
+                            if (devices[device_id].temperature != te) {
+                              console.log("New TE - "+ te);
+                              module.exports.realtime( { id: device_id }, "measure_temperature", te );
+                              devices[device_id].temperature = te;    
+                            } else {
+                              console.log("TE: no change");
+                            }
+                            
+                            //Check current humidity
+                            if (devices[device_id].humidity != hu) {
+                              console.log("New HU - "+ hu);
+                              module.exports.realtime( { id: device_id }, "measure_humidity", hu );
+                              devices[device_id].humidity = hu;    
+                            } else {
+                              console.log("HU: no change");
+                            }
+                        }
+                    }
+                } catch(err) {
                       console.log ("Thermometer data corrupt");
                 }
             }
