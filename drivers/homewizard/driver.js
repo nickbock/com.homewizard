@@ -157,17 +157,18 @@ Homey.manager('flow').on('action.set_preset', function( callback, args ){
 
 function getStatus(device_id) {
     homewizard.getDeviceData(device_id, 'preset', function(callback) {
+        Homey.log('PRESET:' + callback);
         try {
+            if (!('preset' in devices[device_id])) {
+                Homey.log('Preset was set to' + callback);
+                devices[device_id].preset = callback;
+            }
+            
             if (('preset' in devices[device_id]) && devices[device_id].preset != callback) {
                 Homey.manager('flow').trigger('preset_changed', {
                     preset: callback
                 });
                 Homey.log('Preset was changed!');
-            }
-            
-            if (!('preset' in devices[device_id])) {
-                Homey.log('Preset was set to' + callback);
-                devices[device_id].preset = callback;
             }
         } catch(err) {
             console.log ("HomeWizard data corrupt");
