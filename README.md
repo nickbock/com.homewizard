@@ -2,6 +2,12 @@
         
 This app let's you connect your HomeWizard to Homey. You can add your HomeWizard in the device section. Once done it will show up in the flow-editor, ready to be used!
 
+
+
+**If you like this app, then consider to buy me a beer :)**
+
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=77PULBQVXB8ZG)
+
 V0.1.0:
 
 * Improved polling (far less requests to HomeWizard)

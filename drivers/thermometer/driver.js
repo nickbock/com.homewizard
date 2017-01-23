@@ -110,7 +110,7 @@ function getStatus(device_id) {
                               module.exports.realtime( { id: device_id }, "measure_temperature", te );
                               devices[device_id].temperature = te;    
                             } else {
-                              console.log("TE: no change");
+                              //console.log("TE: no change");
                             }
                             
                             //Check current humidity
@@ -119,7 +119,7 @@ function getStatus(device_id) {
                               module.exports.realtime( { id: device_id }, "measure_humidity", hu );
                               devices[device_id].humidity = hu;    
                             } else {
-                              console.log("HU: no change");
+                              //console.log("HU: no change");
                             }
                         }
                     }

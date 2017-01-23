@@ -33,8 +33,8 @@
 		"triggers": [{
 				"id": "preset_changed",
 				"title": {
-					"en": "Preset changed",
-					"nl": "Preset veranderd"
+					"en": "Preset has changed",
+					"nl": "Preset is veranderd"
 				},
 				"args": [{
 					"name": "Homewizard",

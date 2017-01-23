@@ -68,8 +68,11 @@ module.exports.init = function(devices_data, callback) {
         });
     });
     homewizard.setDevices(devices);
-    
     homewizard.startpoll();
+    
+    if (Object.keys(devices).length > 0) {
+      startPolling();
+    }
     
 	Homey.log('HomeWizard driver init done');
 	callback (null, true);
@@ -150,3 +153,32 @@ Homey.manager('flow').on('action.set_preset', function( callback, args ){
       }
     });
 });
+
+
+function getStatus(device_id) {
+    homewizard.getDeviceData(device_id, 'preset', function(callback) {
+        try {
+            if (('preset' in devices[device_id]) && devices[device_id].preset != response.preset) {
+                Homey.manager('flow').trigger('preset_changed', {
+                    preset: response.preset
+                });
+                Homey.log('Preset was changed!');
+            }
+            
+            if (!('preset' in devices[device_id])) {
+                devices[device_id].preset = 0;
+            }
+        } catch(err) {
+            console.log ("HomeWizard data corrupt");
+        }
+    });
+}
+ 
+function startPolling() {
+   refreshIntervalId = setInterval(function () {
+     Homey.log("--Start HomeWizard Polling-- ");
+     Object.keys(devices).forEach(function (device_id) {
+       getStatus(device_id);
+     });
+   }, 1000 * 10);
+}

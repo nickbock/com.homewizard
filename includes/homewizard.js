@@ -155,12 +155,6 @@ module.exports = (function(){
          }
          homewizard.call(device_id, '/get-sensors', function(err, response) {
             if (err === null) {
-               if (('preset' in self.devices[device_id].polldata) &&  self.devices[device_id].polldata.preset != response.preset) {
-                 Homey.manager('flow').trigger('preset_changed', {
-                     preset: response.preset
-                 });
-                 Homey.log('Preset was changed!');
-               }
                self.devices[device_id].polldata.preset = response.preset;
                self.devices[device_id].polldata.heatlinks = response.heatlinks;
                self.devices[device_id].polldata.energylinks = response.energylinks;
