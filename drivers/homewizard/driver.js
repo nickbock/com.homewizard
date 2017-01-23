@@ -158,7 +158,7 @@ Homey.manager('flow').on('action.set_preset', function( callback, args ){
 function getStatus(device_id) {
     homewizard.getDeviceData(device_id, 'preset', function(callback) {
         try {
-            if (('preset' in devices[device_id]) && devices[device_id].preset != response.preset) {
+            if (('preset' in devices[device_id]) && devices[device_id].preset != callback) {
                 Homey.manager('flow').trigger('preset_changed', {
                     preset: response.preset
                 });
