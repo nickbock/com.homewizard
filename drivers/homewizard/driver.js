@@ -166,9 +166,7 @@ function getStatus(device_id) {
             
             if (('preset' in devices[device_id]) && devices[device_id].preset != callback) {
                 devices[device_id].preset = callback;
-                Homey.manager('flow').trigger('preset_changed', {
-                    preset: callback
-                });
+                Homey.manager('flow').triggerDevice('preset_changed', { preset: callback }, null, { id: device_id } );
                 Homey.log('Preset was changed!');
             }
         } catch(err) {
