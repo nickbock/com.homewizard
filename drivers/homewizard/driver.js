@@ -166,6 +166,7 @@ function getStatus(device_id) {
             }
             
             if (!('preset' in devices[device_id])) {
+                Homey.log('Preset was set to' + callback);
                 devices[device_id].preset = callback;
             }
         } catch(err) {
