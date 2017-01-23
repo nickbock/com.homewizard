@@ -39,7 +39,7 @@
 				"args": [{
 					"name": "Homewizard",
 					"type": "device",
-					"filter": "driver_id=homewizard"
+					"filter": "driver_uri=homey:app:com.homewizard&driver_id=homewizard"
 				}],
 				"tokens": [{
 					"name": "preset",
