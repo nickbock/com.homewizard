@@ -166,7 +166,7 @@ function getStatus(device_id) {
             }
             
             if (!('preset' in devices[device_id])) {
-                devices[device_id].preset = 0;
+                devices[device_id].preset = callback;
             }
         } catch(err) {
             console.log ("HomeWizard data corrupt");
