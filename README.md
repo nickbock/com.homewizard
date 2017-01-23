@@ -6,7 +6,7 @@ This app let's you connect your HomeWizard to Homey. You can add your HomeWizard
 
 **If you like this app, then consider to buy me a beer :)**
 
-[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NMEY96Y252S5S)
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4653ZKTPTPSLW)
 
 
 V0.1.1:
