@@ -1,6 +1,7 @@
-var devices = [];
+var devices = {};
 var homewizard = require('./../../includes/homewizard.js');
 var request = require('request');
+var refreshIntervalId;
 
 // SETTINGS
 module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj, changedKeysArr, callback ) {
@@ -39,7 +40,8 @@ module.exports.pair = function( socket ) {
                 homewizard.setDevices(devices);
                 callback( null, devices );
                 socket.emit("success", device);
-			} else {
+                startPolling();
+      } else {
 				//false
                 socket.emit("error", "no response");
 			}
@@ -78,9 +80,13 @@ module.exports.init = function(devices_data, callback) {
 	callback (null, true);
 };
 
-module.exports.deleted = function( device_data ) {  
+module.exports.deleted = function( device_data ) {
+    delete devices[device_data.id];
+    if (Object.keys(devices).length === 0) {
+      clearInterval(refreshIntervalId);
+      Homey.log("--Stopped Polling--");
+    }
     Homey.log('deleted: ' + JSON.stringify(device_data));
-    devices[device_data.id] = [];
 };
 
 // SCENES
@@ -179,10 +185,13 @@ function getStatus(device_id) {
 }
  
 function startPolling() {
-   refreshIntervalId = setInterval(function () {
-     Homey.log("--Start HomeWizard Polling-- ");
-     Object.keys(devices).forEach(function (device_id) {
-       getStatus(device_id);
-     });
-   }, 1000 * 10);
+    if (refreshIntervalId) {
+        clearInterval(refreshIntervalId);
+    }
+    refreshIntervalId = setInterval(function () {
+        Homey.log("--Start HomeWizard Polling-- ");
+        Object.keys(devices).forEach(function (device_id) {
+            getStatus(device_id);
+        });
+    }, 1000 * 10);
 }
