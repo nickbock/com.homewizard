@@ -1,4 +1,4 @@
-var devices = [];
+var devices = {};
 var homewizard = require('./../../includes/homewizard.js');
 var refreshIntervalId = 0;
 
@@ -20,7 +20,7 @@ module.exports.pair = function( socket ) {
         homewizard.getDevices(function(homewizard_devices) {
             var hw_devices = {};
             Object.keys(homewizard_devices).forEach(function(key) {
-                thermometers = JSON.stringify(homewizard_devices[key].polldata.thermometers);
+                var thermometers = JSON.stringify(homewizard_devices[key].polldata.thermometers);
                 
                 hw_devices[key] = homewizard_devices[key];
                 hw_devices[key].polldata = {};
@@ -70,9 +70,11 @@ module.exports.init = function(devices_data, callback) {
 };
 
 module.exports.deleted = function( device_data ) {
-    clearInterval(refreshIntervalId);
-    Homey.log("--Stopped Polling--");  
-    devices = [];
+    delete devices[device_data.id];
+    if (Object.keys(devices).length === 0) {
+        clearInterval(refreshIntervalId);
+        Homey.log("--Stopped Polling--");
+    }
     Homey.log('deleted: ' + JSON.stringify(device_data));
 };
 
@@ -84,7 +86,7 @@ module.exports.capabilities = {
       if (device instanceof Error) return callback(device);
       console.log("measure_temperature");
       getStatus(device.id);
-      newvalue = devices[device.id].temperature;
+      var newvalue = devices[device.id].temperature;
       // Callback ambient temperature
       callback(null, newvalue);
     }
@@ -131,15 +133,23 @@ function getStatus(device_id) {
     } else {
         Homey.log('Removed Thermometer '+ device_id +' (old settings)');
         module.exports.setUnavailable({id: device_id}, "No Thermometer found" );
-        clearInterval(refreshIntervalId);
+        // Only clear interval when the unavailable device is the only device on this driver
+        // This will prevent stopping the polling when a user has 1 device with old settings and 1 with new
+        // In the event that a user has multiple devices with old settings this function will get called every 10 seconds but that should not be a problem
+        if(Object.keys(devices).length === 1) {
+            clearInterval(refreshIntervalId);
+        }
     }
  }
  
- function startPolling() {
+function startPolling() {
+    if (refreshIntervalId) {
+      clearInterval(refreshIntervalId);
+    }
     refreshIntervalId = setInterval(function () {
-      Homey.log("--Start Thermometer Polling-- ");
-      Object.keys(devices).forEach(function (device_id) {
-        getStatus(device_id);
-      });
+        Homey.log("--Start Thermometer Polling-- ");
+        Object.keys(devices).forEach(function (device_id) {
+            getStatus(device_id);
+        });
     }, 1000 * 10);
  }
