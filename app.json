@@ -59,7 +59,7 @@
 				"args": [{
 					"name": "Energylink",
 					"type": "device",
-					"filter": "driver_uri=homey:app:com.homewizard&driver_id=energylink",
+					"filter": "driver_id=energylink",
 					"placeholder": {
 						"en": "Which energylink",
 						"nl": "Welke energylink"
@@ -82,7 +82,7 @@
 				"args": [{
 					"name": "Energylink",
 					"type": "device",
-					"filter": "driver_uri=homey:app:com.homewizard&driver_id=energylink",
+					"filter": "driver_id=energylink",
 					"placeholder": {
 						"en": "Which energylink",
 						"nl": "Welke energylink"
@@ -105,7 +105,7 @@
 				"args": [{
 					"name": "Energylink",
 					"type": "device",
-					"filter": "driver_uri=homey:app:com.homewizard&driver_id=energylink",
+					"filter": "driver_id=energylink",
 					"placeholder": {
 						"en": "Which energylink",
 						"nl": "Welke energylink"
@@ -128,7 +128,7 @@
 				"args": [{
 					"name": "Energylink",
 					"type": "device",
-					"filter": "driver_uri=homey:app:com.homewizard&driver_id=energylink",
+					"filter": "driver_id=energylink",
 					"placeholder": {
 						"en": "Which energylink",
 						"nl": "Welke energylink"
