@@ -39,10 +39,12 @@
 				"args": [{
 					"name": "Homewizard",
 					"type": "device",
-					"filter": "driver_uri=homey:app:com.homewizard&driver_id=homewizard"
+					"filter": "driver_id=homewizard"
+					
 				}],
 				"tokens": [{
 					"name": "preset",
+					"type": "number",
 					"title": {
 						"en": "Preset",
 						"nl": "Preset"
@@ -65,6 +67,7 @@
 				}],
 				"tokens": [{
 					"name": "power_used",
+					"type": "number",
 					"title": {
 						"en": "Watt",
 						"nl": "Watt"
@@ -87,6 +90,7 @@
 				}],
 				"tokens": [{
 					"name": "power_s1",
+					"type": "number",
 					"title": {
 						"en": "Watt",
 						"nl": "Watt"
@@ -109,6 +113,7 @@
 				}],
 				"tokens": [{
 					"name": "power_daytotal_used",
+					"type": "number",
 					"title": {
 						"en": "kWh",
 						"nl": "kWh"
@@ -131,6 +136,7 @@
 				}],
 				"tokens": [{
 					"name": "power_daytotal_s1",
+					"type": "number",
 					"title": {
 						"en": "kWh",
 						"nl": "kWh"
