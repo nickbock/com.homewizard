@@ -3,6 +3,11 @@ var homewizard = require('./../../includes/homewizard.js');
 var request = require('request');
 var refreshIntervalId;
 
+var preset_text = '';
+var preset_text_nl = ['Thuis', 'Afwezig', 'Slapen', 'Vakantie'];
+var preset_text_en = ['Home', 'Away', 'Sleep', 'Holiday'];
+var homey_lang = Homey.manager('i18n').getLanguage();
+
 // SETTINGS
 module.exports.settings = function( device_data, newSettingsObj, oldSettingsObj, changedKeysArr, callback ) {
     Homey.log ('Changed settings: ' + JSON.stringify(device_data) + ' / ' + JSON.stringify(newSettingsObj) + ' / old = ' + JSON.stringify(oldSettingsObj));
@@ -173,7 +178,13 @@ function getStatus(device_id) {
             if (('preset' in devices[device_id]) && devices[device_id].preset != callback) {
                 devices[device_id].preset = callback;
                 Homey.log('Flow call!' + callback);
-                Homey.manager('flow').triggerDevice('preset_changed', { preset: callback }, null, { id: device_id } , (err) => {
+                if (homey_lang == "nl") {
+                    preset_text = preset_text_nl[callback];
+                } else {
+                    preset_text = preset_text_en[callback];
+                }
+                Homey.log(preset_text);
+                Homey.manager('flow').triggerDevice('preset_changed', { preset: callback, preset_text: preset_text }, null, { id: device_id } , (err) => {
                 if (err) return Homey.error('Error triggeringDevice:', err);
             });
                 Homey.log('Preset was changed!');
