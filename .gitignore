@@ -26,6 +26,11 @@ Temporary Items
 .apdisk
 
 #################
+## Jetbrains IDEs
+#################
+.idea
+
+#################
 ## Eclipse
 #################
 

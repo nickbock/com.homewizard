@@ -12,7 +12,7 @@ This app let's you connect your HomeWizard to Homey. You can add your HomeWizard
 V0.1.1:
 
 * Added temp sensors
-* Added trigger on prest change
+* Added trigger on preset change
 
 V0.1.0:
 
