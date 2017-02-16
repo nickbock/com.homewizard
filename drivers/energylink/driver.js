@@ -158,7 +158,7 @@ function getStatus(device_id) {
         var homewizard_id = devices[device_id].settings.homewizard_id;
         homewizard.getDeviceData(homewizard_id, 'energylinks', function(callback) {
             if (Object.keys(callback).length > 0) {
-                try {
+                
                     module.exports.setAvailable({id: device_id});
                     
                     var value_s1 = ( callback[0].t1 ) ; // Read t1 from energylink (solar/water/null)
@@ -232,12 +232,8 @@ function getStatus(device_id) {
                         console.log("S1 Daytotal- "+ energy_daytotal_prod);                                
                         Homey.manager('flow').triggerDevice('meter_power_s1_changed', { power_daytotal_s1: energy_daytotal_prod }, null, { id: device_id });                                                                                    
                     }
-                }
-                catch(err) {
-                      // Error with Energylink no data in Energylink
-                      console.log ("No Energylink found");
-                      module.exports.setUnavailable({id: device_id}, "No Energylink found" );
-                }
+                
+                
             }
         });
     } else {
