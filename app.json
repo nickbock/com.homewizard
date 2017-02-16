@@ -3,7 +3,7 @@
 	"name": {
 		"en": "HomeWizard"
 	},
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"compatibility": ">=0.9",
 	"description": {
 		"en": "Control HomeWizard using Homey"
@@ -40,7 +40,7 @@
 					"name": "Homewizard",
 					"type": "device",
 					"filter": "driver_id=homewizard"
-					
+
 				}],
 				"tokens": [{
 					"name": "preset",
@@ -49,8 +49,15 @@
 						"en": "Preset",
 						"nl": "Preset"
 					}
+				}, {
+					"name": "preset_text",
+					"type": "string",
+					"title": {
+						"en": "Text",
+						"nl": "Tekst"
+					}
 				}]
-			},{
+			}, {
 				"id": "power_used_changed",
 				"title": {
 					"en": "Power used changed",

@@ -1,4 +1,4 @@
-var devices = [];
+var devices = {};
 var homewizard = require('./../../includes/homewizard.js');
 var refreshIntervalId = 0;
 
@@ -67,9 +67,11 @@ module.exports.init = function(devices_data, callback) {
 };
 
 module.exports.deleted = function( device_data ) {
-    clearInterval(refreshIntervalId);
-    console.log("--Stopped Polling Wattcher--");  
-    devices = [];
+    delete devices[device_data.id];
+    if (Object.keys(devices).length === 0) {
+        clearInterval(refreshIntervalId);
+        console.log("--Stopped Polling Wattcher--");
+    }
     Homey.log('deleted: ' + JSON.stringify(device_data));
 };
 
@@ -101,12 +103,15 @@ module.exports.capabilities = {
 
 // Start polling
 function startPolling() {
-  refreshIntervalId = setInterval(function () {
-    console.log("--Start Wattcher Polling-- ");
-    Object.keys(devices).forEach(function (device_id) {
-      getStatus(device_id);
-    });
-  }, 1000 * 10);
+    if(refreshIntervalId){
+        clearInterval(refreshIntervalId);
+    }
+    refreshIntervalId = setInterval(function () {
+        console.log("--Start Wattcher Polling-- ");
+        Object.keys(devices).forEach(function (device_id) {
+          getStatus(device_id);
+        });
+    }, 1000 * 10);
 }
 
 function getStatus(device_id) {
@@ -136,7 +141,12 @@ function getStatus(device_id) {
     } else {
         Homey.log('Removed Wattcher '+ device_id +' (old settings)');
         module.exports.setUnavailable({id: device_id}, "No Wattcher found" );
-        clearInterval(refreshIntervalId);
+        // Only clear interval when the unavailable device is the only device on this driver
+        // This will prevent stopping the polling when a user has 1 device with old settings and 1 with new
+        // In the event that a user has multiple devices with old settings this function will get called every 10 seconds but that should not be a problem
+        if(Object.keys(devices).length === 1) {
+            clearInterval(refreshIntervalId);
+        }
     }
 }
 
