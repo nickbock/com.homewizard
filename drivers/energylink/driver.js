@@ -153,62 +153,8 @@ module.exports.capabilities = {
                 callback(null, device.last_meter_water);
             }
         }
-    },
-    "meter_power.cons-t1": {
-        get: function (device_data, callback) {
-            var device = devices[device_data.id];
+    }
 
-            if (device === undefined) {
-                callback(null, 0);
-            } else {
-                callback(null, device.last_meter_power_cons_t1);
-            }
-        }
-    },
-    "meter_power.prod-t1": {
-        get: function (device_data, callback) {
-            var device = devices[device_data.id];
-
-            if (device === undefined) {
-                callback(null, 0);
-            } else {
-                callback(null, device.last_meter_power_prod_t1);
-            }
-        }
-    },
-    "meter_power.cons-t2": {
-        get: function (device_data, callback) {
-            var device = devices[device_data.id];
-
-            if (device === undefined) {
-                callback(null, 0);
-            } else {
-                callback(null, device.last_meter_power_cons_t2);
-            }
-        }
-    },
-    "meter_power.prod-t2": {
-        get: function (device_data, callback) {
-            var device = devices[device_data.id];
-
-            if (device === undefined) {
-                callback(null, 0);
-            } else {
-                callback(null, device.last_meter_power_prod_t2);
-            }
-        }
-    },
-    meter_gas.smart: {
-        get: function (device_data, callback) {
-            var device = devices[device_data.id];
-
-            if (device === undefined) {
-                callback(null, 0);
-            } else {
-                callback(null, device.last_meter_gas_smart);
-            }
-        }
-    }    
 };
 
 // Start polling
