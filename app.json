@@ -127,6 +127,29 @@
 					}
 				}]
 			}, {
+				"id": "meter_power_aggregated_changed",
+				"title": {
+					"en": "Overall usage changed",
+					"nl": "Netto verbruik veranderd"
+				},
+				"args": [{
+					"name": "Energylink",
+					"type": "device",
+					"filter": "driver_id=energylink",
+					"placeholder": {
+						"en": "Which energylink",
+						"nl": "Welke energylink"
+					}
+				}],
+				"tokens": [{
+					"name": "power_daytotal_aggr",
+					"type": "number",
+					"title": {
+						"en": "kWh",
+						"nl": "kWh"
+					}
+				}]
+			}, {
 				"id": "meter_power_s1_changed",
 				"title": {
 					"en": "Daily production changed",
@@ -356,7 +379,7 @@
 		},
 		"class": "sensor",
 		"capabilities": [
-			"meter_power.used", "meter_power.s1", "meter_gas", "measure_power.used", "measure_power.s1", "meter_water"
+			"meter_power.used", "meter_power.aggr", "meter_power.s1", "meter_gas", "measure_power.used", "measure_power.s1", "meter_water"
 		],
 
 		"capabilitiesOptions": {
@@ -364,6 +387,12 @@
 				"title": {
 					"en": "Day usage",
 					"nl": "Dag gebruik"
+				}
+			},
+			"meter_power.aggr": {
+				"title": {
+					"en": "Overall usage",
+					"nl": "Netto gebruik"
 				}
 			},
 			"meter_power.s1": {
