@@ -8,6 +8,17 @@ This app let's you connect your HomeWizard to Homey. You can add your HomeWizard
 
 [![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4653ZKTPTPSLW)
 
+v0.1.3: 
+Energylink updates:
+* s1 and s2 are now giving information on either solar or water (whatever is connected to it)
+* "Netto verbruik" feature added, it will now show the aggregated power usage which can be negative if your solarpanels do their job. ;)
+* SIDENOTE: You need to redo/add Energylink device to make the "Netto verbruik" visible
+Other updates:
+* Made fixes for app to work on 1.2.0 Firmware (Thermometer & Scenes)
+
+
+v0.1.2: 
+Updated Polling method to avoid traffic overhead and timing issues
 
 V0.1.1:
 

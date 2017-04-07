@@ -110,6 +110,17 @@ module.exports.capabilities = {
             }
         }
     },
+    "meter_power.aggr": {
+        get: function (device_data, callback) {
+            var device = devices[device_data.id];
+
+            if (device === undefined) {
+                callback(null, 0);
+            } else {
+                callback(null, device.last_meter_power_aggr);
+            }
+        }
+    },
     "meter_power.s1": {
         get: function (device_data, callback) {
             var device = devices[device_data.id];
@@ -142,7 +153,8 @@ module.exports.capabilities = {
                 callback(null, device.last_meter_water);
             }
         }
-    }    
+    }
+
 };
 
 // Start polling
@@ -174,15 +186,27 @@ function getStatus(device_id) {
                     
                     // Common Energylink data                 
                     var energy_current_cons = ( callback[0].used.po ); // WATTS Energy used JSON $energylink[0]['used']['po']
-                    var energy_daytotal_cons = ( callback[0].used.dayTotal ); // KWH Energy used JSON $energylink[0]['used']['po']
-                    var gas_daytotal_cons = ( callback[0].gas.dayTotal ); // m3 Energy produced via S1 $energylink[0]['gas']['dayTotal']
+                    var energy_daytotal_cons = ( callback[0].used.dayTotal ); // KWH Energy used JSON $energylink[0]['used']['dayTotal']
+                    var energy_daytotal_aggr = ( callback[0].aggregate.dayTotal ) ; // KWH Energy aggregated is used - generated $energylink[0]['aggregate']['dayTotal']
+                                       
+                    // Some Energylink do not have gas information so try to get it else fail silently
+                    try {
+                           var gas_daytotal_cons = ( callback[0].gas.dayTotal ); // m3 Energy produced via S1 $energylink[0]['gas']['dayTotal']
+                            // Consumed gas      
+                           module.exports.realtime( { id: device_id }, "meter_gas", gas_daytotal_cons );
+                    }
+                    catch(err) {
+                      // Error with Energylink no data in Energylink
+                      console.log ("No Gas information found");
+                    }
                     
                     // Consumed elec current
                     module.exports.realtime( { id: device_id }, "measure_power.used", energy_current_cons );
                     // Consumed elec total day
                     module.exports.realtime( { id: device_id }, "meter_power.used", energy_daytotal_cons );
-                    // Consumed gas      
-                    module.exports.realtime( { id: device_id }, "meter_gas", gas_daytotal_cons );
+                    // Consumed elec total day
+                    module.exports.realtime( { id: device_id }, "meter_power.aggr", energy_daytotal_aggr );
+
                     
                     if (value_s1 == 'solar' ) {
                     	  var energy_current_prod = ( callback[0].s1.po ); // WATTS Energy produced via S1 $energylink[0]['s1']['po']
@@ -237,6 +261,11 @@ function getStatus(device_id) {
                         console.log("S1 Daytotal- "+ energy_daytotal_prod);                                
                         Homey.manager('flow').triggerDevice('meter_power_s1_changed', { power_daytotal_s1: energy_daytotal_prod }, null, { id: device_id });                                                                                    
                     }
+                    if (energy_daytotal_aggr != devices[device_id].last_meter_power_aggr) {
+                        console.log("Aggregated Daytotal- "+ energy_daytotal_aggr);                                
+                        Homey.manager('flow').triggerDevice('meter_power_aggregated_changed', { power_daytotal_aggr: energy_daytotal_aggr }, null, { id: device_id });
+                    }
+                    
                 }
                 catch(err) {
                       // Error with Energylink no data in Energylink
