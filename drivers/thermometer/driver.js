@@ -31,7 +31,7 @@ module.exports.pair = function( socket ) {
     });
     
     socket.on('manual_add', function (device, callback) {        
-        if (device.settings.homewizard_id.indexOf('HW_') === -1 && device.settings.homewizard_id.indexOf('HW') === 0) {
+        if (typeof device.settings.homewizard_id == "string" && device.settings.homewizard_id.indexOf('HW_') === -1 && device.settings.homewizard_id.indexOf('HW') === 0) {
             //true
             Homey.log('Thermometer added ' + device.data.id);
             devices[device.data.id] = {

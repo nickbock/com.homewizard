@@ -206,8 +206,7 @@ function getStatus(device_id) {
                     module.exports.realtime( { id: device_id }, "meter_power.used", energy_daytotal_cons );
                     // Consumed elec total day
                     module.exports.realtime( { id: device_id }, "meter_power.aggr", energy_daytotal_aggr );
-                    // Consumed gas      
-                    module.exports.realtime( { id: device_id }, "meter_gas", gas_daytotal_cons );
+
                     
                     if (value_s1 == 'solar' ) {
                     	  var energy_current_prod = ( callback[0].s1.po ); // WATTS Energy produced via S1 $energylink[0]['s1']['po']

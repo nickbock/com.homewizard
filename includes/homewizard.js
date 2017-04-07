@@ -74,7 +74,7 @@ module.exports = (function(){
                timeout: 10000,
              }, function (error, response, body) {
                if (response === null || response === undefined) {
-                   callback(false); 
+                   callback('No response', []); 
                    return;
                }
                if (!error && response.statusCode == 200) {
@@ -90,11 +90,11 @@ module.exports = (function(){
                   } catch (exception) {
                      Homey.log('JSON: '+ body);
                      jsonObject = null;
-                     callback(false); 
+                     callback('Invalid data', []); 
                   }
                } else {        
                   if(typeof callback === 'function') {
-                    callback(false); 
+                    callback('Error', []); 
                   }
                   Homey.log('Error: '+error);
                }
