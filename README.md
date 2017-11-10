@@ -8,6 +8,15 @@ This app let's you connect your HomeWizard to Homey. You can add your HomeWizard
 
 [![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4653ZKTPTPSLW)
 
+v0.1.5:
+* Added rainmeter 
+* Added windmeter (Work in progress)
+* SIDENOTE just as the Energylink, heatlink etc you need to add Rain and windmeter separately.
+  Verify homewizard has its windmeter units set to km/h else you get funny measures 
+
+v0.1.4:
+* Bug fixes
+
 v0.1.3: 
 Energylink updates:
 * s1 and s2 are now giving information on either solar or water (whatever is connected to it)
