@@ -106,7 +106,7 @@ module.exports = (function(){
    };
    
    homewizard.getScenes = function(args, callback) {
-      this.call(args.args.device.id, '/gplist', function(err, response) {
+      this.call(args.args.device.data.id, '/gplist', function(err, response) {
         if (err === null) {
           var output = [];
           for (var i = 0, len = response.length; i < len; i++) {
