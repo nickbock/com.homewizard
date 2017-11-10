@@ -3,7 +3,7 @@
 	"name": {
 		"en": "HomeWizard"
 	},
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"compatibility": ">=0.9",
 	"description": {
 		"en": "Control HomeWizard using Homey"
@@ -534,11 +534,11 @@
 		},
 		"class": "sensor",
 		"capabilities": [
-			"measure_rain"
+			"measure_rain.last3h", "measure_rain.total"
 		],
 
 		"capabilitiesOptions": {
-			"measure_rain.3h": {
+			"measure_rain.last3h": {
 				"title": {
 					"en": "Last 3 hours rain",
 					"nl": "Laatste 3 uur regen"
