@@ -1,0 +1,29 @@
+{
+  "name": "com.homewizard",
+  "version": "3.0.2",
+  "description": "Homewizard app for Homey",
+  "main": "app.js",
+  "dependencies": {
+    "abort-controller": "^3.0.0",
+    "node-fetch": "^2.6.7",
+    "save": "^2.4.0"
+  },
+  "scripts": {
+    "test": "athom app run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jtebbens/com.homewizard.git"
+  },
+  "author": "Jeroen Tebbens",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jtebbens/com.homewizard/issues"
+  },
+  "homepage": "https://github.com/jtebbens/com.homewizard#readme",
+  "devDependencies": {
+    "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.3",
+    "eslint": "^7.32.0",
+    "eslint-config-athom": "^3.1.1"
+  }
+}

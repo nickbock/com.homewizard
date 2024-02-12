@@ -1,0 +1,24 @@
+{
+  "extends": "eslint:recommended",
+  "env": {
+    "node":  true,
+    "es6": true,
+    "mocha": true,
+    "browser": true
+  },
+  "linebreak-style": 0,
+  "rules": {
+    "no-mixed-spaces-and-tabs": 0, // disable rule
+    "callback-return": "warn",
+    "handle-callback-err": "error",
+    "no-new-require": "error",
+    "no-empty-function": "error",
+    "global-require": "error",
+    "no-return-await": "error",
+    "no-catch-shadow": "error",
+    "no-await-in-loop": "error",
+    "array-callback-return" : "error",
+    "no-invalid-this" : "error"
+  }
+
+}

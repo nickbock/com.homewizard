@@ -1,0 +1,284 @@
+{
+  "2.0.8": {
+    "en": "Bug fix: setClass(solar)"
+  },
+  "2.0.9": {
+    "en": "Bug fixes (memory)"
+  },
+  "2.0.10": {
+    "en": "node-fetch increased timeout 20s"
+  },
+  "2.0.11": {
+    "en": "Bug fixes on P1 dongle (removal of Current usage all phases -> duplicate)"
+  },
+  "2.0.12": {
+    "en": "Bug fix attempt (customer request SDM230 & P1 dongle)"
+  },
+  "2.0.13": {
+    "en": "Solar class fix for KWH module"
+  },
+  "2.0.14": {
+    "en": "Bugfix SDM230 (Measure_power value empty)"
+  },
+  "2.0.15": {
+    "en": "Manifest update"
+  },
+  "2.0.16": {
+    "en": "Heatlink and Energylink icon update"
+  },
+  "2.0.17": {
+    "en": "svg files size issue"
+  },
+  "2.1.1": {
+    "en": "Energy socket support"
+  },
+  "2.1.2": {
+    "en": "Images and icon"
+  },
+  "2.1.3": {
+    "en": "Improved mdns discovery (avoid wrong devices)"
+  },
+  "2.1.4": {
+    "en": "Thermometer and Humidity offset support"
+  },
+  "2.1.5": {
+    "en": "Attempt to catch unhandled rejections"
+  },
+  "2.1.6": {
+    "en": "async fixes"
+  },
+  "2.1.7": {
+    "en": "measure_rain invalid check"
+  },
+  "2.1.8": {
+    "en": "Energylink error catch fixes"
+  },
+  "2.1.9": {
+    "en": "Adjusting timeouts polling for slow Homewizard legacy devices"
+  },
+  "2.1.10": {
+    "en": "Homewizard Legacy polling to 20seconds and timeout 18seconds"
+  },
+  "2.1.11": {
+    "en": "Energylink bug fix"
+  },
+  "2.1.13": {
+    "en": "AbortController & FetchError catch error handling"
+  },
+  "2.1.14": {
+    "en": "Rainmeter fix"
+  },
+  "2.1.15": {
+    "en": "Typo fix for rainmeter"
+  },
+  "2.1.16": {
+    "en": "Adjusted mdns condition check as it was matching the wrong devices"
+  },
+  "2.1.17": {
+    "en": "Changed mdns discovery string for sdm230 and sdm630 to host = kwhmeter"
+  },
+  "2.1.18": {
+    "en": "Conditional timeouts and code fixes"
+  },
+  "2.1.19": {
+    "en": "Added precheck for Homewizard Legacy before attempting node-fetch connect"
+  },
+  "2.1.20": {
+    "en": "Typo fix"
+  },
+  "2.1.21": {
+    "en": "Code fix (removed async on json parse, didnt update the values)"
+  },
+  "2.1.22": {
+    "en": "Potential workaround for fqdn based ip for homewizard legacy"
+  },
+  "2.1.23": {
+    "en": "Fix for string to number convert (Homewizard port)"
+  },
+  "2.1.25": {
+    "en": "Added Homewizard Energy - Watermeter support"
+  },
+  "2.1.26": {
+    "en": "Fix unhandledRejection"
+  },
+  "2.1.27": {
+    "en": "Replaced node-fetch with Axios for Homewizard Legacy as its easier for timeout issues."
+  },
+  "2.1.28": {
+    "en": "Heatlink function error fix"
+  },
+  "2.1.29": {
+    "en": "Adjusted error logging to show less details, added axios abort controller to enforce abort to pending session."
+  },
+  "2.1.30": {
+    "en": "Homewizard context/preset bug fix"
+  },
+  "2.1.31": {
+    "en": "Watermeter offset support to align with real value"
+  },
+  "2.1.32": {
+    "en": "Updated kwh1 and kwh3 icons"
+  },
+  "2.1.33": {
+    "en": "Updated icons for Homewizard legacy devices (credits to basvanderploeg)"
+  },
+  "2.1.34": {
+    "en": "Energylink car support and Wifi signal strength value added to Energy Sockets"
+  },
+  "2.1.35": {
+    "en": "Updated wifi ssid logo, added P1, watermeter, kwh1 & kwh3 wifi strength signal support"
+  },
+  "2.1.36": {
+    "en": "Changed energy_socket to class socket (was sensor)."
+  },
+  "2.1.37": {
+    "en": "Minor fixes on energy_socket adjustment"
+  },
+  "2.1.38": {
+    "en": "Changed SDM230 to socket type to allow Solar based tracking (was sensor)"
+  },
+  "2.1.39": {
+    "en": "Bug fix"
+  },
+  "2.1.40": {
+    "en": "Modified solar flag to ignore socket type"
+  },
+  "2.1.41": {
+    "en": "Force socket type to SDM230"
+  },
+  "3.0.0": {
+    "en": "SDKv3 Support (in prep for Pro2023 release)"
+  },
+  "3.0.1": {
+    "en": "Textual fix in app name (showed v3 at end)"
+  },
+  "3.0.2": {
+    "en": "Code cleanup and bugfix"
+  },
+  "3.0.3": {
+    "en": "Offset watermeter and thermometer fixed (callback is not a function error)"
+  },
+  "3.0.4": {
+    "en": "P1 meter fix for returning power and for Sweden having different values from the P1 as aggregated meter."
+  },
+  "3.0.5": {
+    "en": "Code cleanup"
+  },
+  "3.0.6": {
+    "en": "Revert legacy homewizard connectivity back to Axios module, others stay node-fetch"
+  },
+  "3.0.7": {
+    "en": "Preset bugfix (await problem in code)"
+  },
+  "3.0.8": {
+    "en": "Some async/await changes"
+  },
+  "3.1.0": {
+    "en": "New features P1 HW Energy firmware and bugfixes"
+  },
+  "3.1.1": {
+    "en": "Peak/OffPeak trigger fixed"
+  },
+  "3.1.2": {
+    "en": "Pre FW 4.x P1 dongle fix for T1 & T2 export meter values"
+  },
+  "3.1.3": {
+    "en": "Added volt support P1 dongle (3phase types) and code change Homewizard legacy preset changes (rollback to avoid undefined error)"
+  },
+  "3.1.4": {
+    "en": "Bug fix voltage. 3 decimal support for KwH P1 device"
+  },
+  "3.1.5": {
+    "en": "Remove Amp 2 and 3 from Phase 1 P1 dongle"
+  },
+  "3.1.6": {
+    "en": "Typo fix for Phase3 Volt value being empty"
+  },
+  "3.1.7": {
+    "en": "Added custom import and export total kwh meters and triggers for better tracking energy usage"
+  },
+  "3.2.0": {
+    "en": "Improved Heatlink"
+  },
+  "3.2.1": {
+    "en": "Replaced axios with node-fetch and additional retry & abort code. Belgium P1 value added for monthly peak watt"
+  },
+  "3.2.2": {
+    "en": "Text fix for new meter as it got the default measure_power"
+  },
+  "3.2.3": {
+    "en": "Code fix for P1 voltage & amp. Attempt to get rid of callback calls"
+  },
+  "3.2.4": {
+    "en": "Several bug fixes, see changelog"
+  },
+  "3.2.5": {
+    "en": "Homewizard Sensor Driver fix SDK3 problem"
+  },
+  "3.2.6": {
+    "en": "Removed retry code for legacy Homewizard (HW wifi chip cant handle extra connections)"
+  },
+  "3.2.7": {
+    "en": "Increased polling cycle to 20s for HW Legacy"
+  },
+  "3.2.8": {
+    "en": "30s poll and 28s timeout"
+  },
+  "3.2.9": {
+    "en": "Removed retry fetch for HW Legacy. Heatlink added tapwater and updated icons."
+  },
+  "3.2.10": {
+    "en": "Modifications to mDNS. Unhandled rejection code for Heatlink. Drivername changes."
+  },
+  "3.2.11": {
+    "en": "mDNS bugfix on regex and product_type to find devices."
+  },
+  "3.2.12": {
+    "en": "Energylink bug fix s2 for \"other\" or \"car\" type sources."
+  },
+  "3.2.13": {
+    "en": "Windmeter fix (device not found)"
+  },
+  "3.2.14": {
+    "en": "P1 added Power failures, voltage sags & swell counts"
+  },
+  "3.2.15": {
+    "en": "Bug fix socket class for KWH3"
+  },
+  "3.2.16": {
+    "en": "Added optional energy socket Watt compensation"
+  },
+  "3.2.17": {
+    "en": "Controller error bug fix"
+  },
+  "3.2.18": {
+    "en": "Wattcher bug fix and windmeter battery support"
+  },
+  "3.2.19": {
+    "en": "Doorcontact 868 fix for Homewizard Legacy"
+  },
+  "3.2.20": {
+    "en": "Windmeter battery code fix (when battery it needs to update it)"
+  },
+  "3.2.21": {
+    "en": "Windmeter conditional fix (battery empty but shows still data)"
+  },
+  "3.2.22": {
+    "en": "Rainmeter battery alarm added (Homewizard Legacy)"
+  },
+  "3.2.24": {
+    "en": "P1 adjustment for Phase3 circuit. Offset watermeter import from Homewizard Energy when set."
+  },
+  "3.2.25": {
+    "en": "Bugfix watermeter offset"
+  },
+  "3.3.0": {
+    "en": "KWH Meters SDM230 & SDM630 added support for Voltage & Amp"
+  },
+  "3.3.1": {
+    "en": "Bug fix SDM630 active_current_l1_a undefined"
+  },
+  "3.3.2": {
+    "en": "Additional mDNS matching for kWh meters"
+  }
+}
